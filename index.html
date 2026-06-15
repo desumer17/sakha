@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAKHA Education Hub - Administrasi & Ruang Belajar Digital</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Font Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 CSS untuk Alert Menarik -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     
     <style>
@@ -45,7 +41,6 @@
         }
         .nav-link { color: #11998e; font-weight: 600; }
         
-        /* Loading Overlay Global Style */
         #loading-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -57,7 +52,6 @@
             justify-content: center;
         }
         
-        /* Tombol Absen Lingkaran Kilat */
         .btn-check-absen {
             display: inline-block;
             width: 42px;
@@ -77,14 +71,13 @@
         input[type="radio"]:checked + .lbl-i { background-color: #f1c40f; color: white; border-color: #f1c40f; box-shadow: 0 4px 10px rgba(241,196,15,0.4); }
         input[type="radio"]:checked + .lbl-a { background-color: #e74c3c; color: white; border-color: #e74c3c; box-shadow: 0 4px 10px rgba(231,76,60,0.4); }
         
-        /* Style Cetak Kuitansi Resmi */
         #printable-kuitansi {
             font-family: 'Courier New', Courier, monospace;
             color: #000;
             background: white;
-            padding: 30px;
+            padding: 25px;
             border: 2px dashed #000;
-            max-width: 550px;
+            max-width: 480px;
             margin: 0 auto;
         }
 
@@ -95,24 +88,29 @@
             font-size: 0.85rem;
         }
 
-        /* Ruang Cetak Mode Khusus Absen Matriks */
+        /* Desain Khusus Lembar Cetak Matriks & Dokumen Resmi */
+        .header-cetak-formal {
+            display: none;
+            border-bottom: 3px double #000;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
         @media print {
-            body * { visibility: hidden; }
-            #print-area-matriks, #print-area-matriks * { visibility: visible; }
-            #print-area-matriks { position: absolute; left: 0; top: 0; width: 100%; }
+            body { background: white; color: black; }
             .no-print { display: none !important; }
+            .header-cetak-formal { display: block !important; }
+            .card { box-shadow: none !important; padding: 0 !important; }
         }
     </style>
 </head>
 <body>
 
-<!-- LOADING ANIMASI OVERLAY -->
 <div id="loading-overlay" class="d-none">
     <div class="spinner-border text-success" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
     <h5 class="mt-3 fw-bold text-success" id="loading-text">Menghubungkan ke Server SAKHA...</h5>
 </div>
 
-<!-- SCREEN 1: LOGIN PAGE -->
 <div id="screen-login" class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card p-5 text-center" style="max-width: 440px; width: 100%;">
         <div class="d-flex justify-content-center align-items-center mb-1">
@@ -134,10 +132,9 @@
     </div>
 </div>
 
-<!-- NAVBAR UTAMA SYSTEM -->
 <nav id="app-nav" class="navbar navbar-expand-lg theme-bg d-none mb-4 shadow-sm">
     <div class="container">
-        <span class="navbar-brand fw-bold text-white"><span class="me-1">🌳</span> Bimbel SAKHA Digital Hub</span>
+        <span class="navbar-brand fw-bold text-white">🌳 Bimbel SAKHA Digital Hub</span>
         <div class="d-flex align-items-center">
             <span class="text-white small me-3 fw-semibold" id="nama-user-login">Halo, Pengguna</span>
             <button class="btn btn-sm btn-light text-danger rounded-pill px-3 fw-bold shadow-sm" onclick="logoutAplikasi()">Keluar</button>
@@ -145,60 +142,43 @@
     </div>
 </nav>
 
-<!-- MAIN CONTAINER DASHBOARD MULTIUSER -->
 <div id="screen-dashboard" class="container d-none mb-5">
     
-    <!-- ==================== DASHBOARD ADMIN ==================== -->
     <div id="panel-admin" class="d-none">
-        <!-- Kotak Statistik Cepat Ringkas (Audit Profesional Bimbel) -->
         <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="card p-3 border-start border-4 border-success bg-white">
-                    <span class="text-muted small fw-semibold">TOTAL SISWA AKTIF</span>
-                    <h2 class="fw-bold m-0 text-success" id="stat-total-siswa">0</h2>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 border-start border-4 border-primary bg-white">
-                    <span class="text-muted small fw-semibold">TRANSAKSI MASUK (TOTAL)</span>
-                    <h2 class="fw-bold m-0 text-primary" id="stat-total-uang">Rp 0</h2>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 border-start border-4 border-warning bg-white">
-                    <span class="text-muted small fw-semibold">KELAS BERJALAN</span>
-                    <h2 class="fw-bold m-0 text-warning" id="stat-total-kelas">0</h2>
-                </div>
-            </div>
+            <div class="col-md-4"><div class="card p-3 border-start border-4 border-success bg-white"><span class="text-muted small fw-semibold">TOTAL SISWA AKTIF</span><h2 class="fw-bold m-0 text-success" id="stat-total-siswa">0</h2></div></div>
+            <div class="col-md-4"><div class="card p-3 border-start border-4 border-primary bg-white"><span class="text-muted small fw-semibold">TRANSAKSI MASUK (TOTAL)</span><h2 class="fw-bold m-0 text-primary" id="stat-total-uang">Rp 0</h2></div></div>
+            <div class="col-md-4"><div class="card p-3 border-start border-4 border-warning bg-white"><span class="text-muted small fw-semibold">KELAS BERJALAN</span><h2 class="fw-bold m-0 text-warning" id="stat-total-kelas">0</h2></div></div>
         </div>
 
         <ul class="nav nav-pills mb-4 justify-content-center shadow-sm p-2 bg-white rounded-3" id="adminTabs">
             <li class="nav-item"><button class="nav-link active" onclick="bukaTabAdmin('pendaftaran')"><i class="fa fa-user-plus me-1"></i> Data Siswa</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('guru')"><i class="fa fa-chalkboard-teacher me-1"></i> Data Guru</button></li>
             <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('pembayaran')"><i class="fa fa-wallet me-1"></i> Kasir SPP</button></li>
-            <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('rekap')"><i class="fa fa-calendar-check me-1"></i> Rekap Absen Matriks</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('rekap')"><i class="fa fa-calendar-check me-1"></i> Rekap Absen</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('jurnal')"><i class="fa fa-book-open me-1"></i> Pantau Jurnal</button></li>
         </ul>
         
-        <!-- SUB ADMIN: PENDAFTARAN -->
         <div id="tab-adm-pendaftaran" class="sub-panel-admin">
             <div class="row">
                 <div class="col-md-4 mb-4">
                     <div class="card p-4">
-                        <h4 class="fw-bold text-success mb-3">Registrasi Siswa</h4>
+                        <h5 class="fw-bold text-success mb-3">Registrasi Murid Baru</h5>
                         <form id="form-add-siswa">
                             <div class="mb-2"><label class="small fw-semibold">Nama Lengkap Murid</label><input type="text" class="form-control" id="form-s-nama" required></div>
-                            <div class="mb-2"><label class="small fw-semibold">Kelas Tingkat (Bebas: 5A, 8F, 11S)</label><input type="text" class="form-control" id="form-s-kelas" placeholder="Misal: 5A" required></div>
+                            <div class="mb-2"><label class="small fw-semibold">Kelas Tingkat (Bebas)</label><input type="text" class="form-control" id="form-s-kelas" placeholder="Misal: 5A" required></div>
                             <div class="mb-2"><label class="small fw-semibold">Asal Sekolah</label><input type="text" class="form-control" id="form-s-sekolah" required></div>
-                            <div class="mb-2"><label class="small fw-semibold">No. WA Orang Tua (08...)</label><input type="text" class="form-control" id="form-s-hportu" required></div>
-                            <div class="mb-2"><label class="small fw-semibold">No. WA Siswa (08...)</label><input type="text" class="form-control" id="form-s-hpsiswa" required></div>
-                            <div class="mb-3"><label class="small fw-semibold">Tarif SPP Bulanan Bawaan (Rp)</label><input type="number" class="form-control" id="form-s-spp" required></div>
-                            <button type="submit" class="btn btn-theme w-100 py-2">Daftarkan & Buat Akun</button>
+                            <div class="mb-2"><label class="small fw-semibold">No. WA Orang Tua</label><input type="text" class="form-control" id="form-s-hportu" placeholder="08..." required></div>
+                            <div class="mb-2"><label class="small fw-semibold">No. WA Siswa</label><input type="text" class="form-control" id="form-s-hpsiswa" placeholder="08..." required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Tarif SPP Bulanan (Rp)</label><input type="number" class="form-control" id="form-s-spp" required></div>
+                            <button type="submit" class="btn btn-theme w-100 py-2">Daftarkan Murid</button>
                         </form>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="fw-bold m-0">Database Siswa Bimbel</h4>
+                            <h5 class="fw-bold m-0">Database Siswa</h5>
                             <select id="dropdown-filter-siswa" class="form-select w-auto" onchange="tampilkanTabelSiswa()"><option value="Semua">Semua Kelas</option></select>
                         </div>
                         <div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-light"><tr><th>ID</th><th>Nama</th><th>Kelas</th><th>Sekolah</th><th>Hubungi WA</th></tr></thead><tbody id="tbody-tabel-siswa"></tbody></table></div>
@@ -207,25 +187,45 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: KASIR SPP -->
+        <div id="tab-adm-guru" class="sub-panel-admin d-none">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card p-4">
+                        <h5 class="fw-bold text-success mb-3">Registrasi Guru Baru</h5>
+                        <form id="form-add-guru">
+                            <div class="mb-2"><label class="small fw-semibold">Nama Lengkap Guru</label><input type="text" class="form-control" id="form-g-nama" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Mata Pelajaran diampu (Spesifik/Semua)</label><input type="text" class="form-control" id="form-g-mapel" placeholder="Misal: Matematika SMA / Semua SD" required></div>
+                            <button type="submit" class="btn btn-theme w-100 py-2">Daftarkan Akun Guru</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card p-4">
+                        <h5 class="fw-bold mb-3">Daftar Tenaga Pengajar SAKHA</h5>
+                        <div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-light"><tr><th>ID Guru</th><th>Nama Lengkap & Spesialisasi Pengajaran</th><th>Username Login</th></tr></thead><tbody id="tbody-tabel-guru"></tbody></table></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-adm-pembayaran" class="sub-panel-admin d-none">
             <div class="row">
                 <div class="col-md-5 mb-4">
                     <div class="card p-4">
-                        <h4 class="fw-bold text-success mb-3">Kasir Penerimaan Uang</h4>
+                        <h5 class="fw-bold text-success mb-3">Kasir Penerimaan SPP</h5>
                         <div class="mb-3 bg-light p-2 rounded-3 border">
-                            <label class="form-label small fw-bold text-danger"><i class="fa fa-search"></i> FILTER PENCARIAN PINTAR (MINIMAL 3 HURUF):</label>
-                            <input type="text" class="form-control" id="search-kasir-nama" oninput="mesinCariKasir(this.value)" placeholder="Ketik nama murid di sini...">
+                            <label class="form-label small fw-bold text-danger"><i class="fa fa-search"></i> CARI NAMA MURID (MIN 3 HURUF):</label>
+                            <input type="text" class="form-control" id="search-kasir-nama" oninput="mesinCariKasir(this.value)" placeholder="Ketik nama murid...">
                             <div id="container-search-kasir" class="list-group mt-2 shadow-sm"></div>
                         </div>
                         <form id="form-proses-kasir">
                             <input type="hidden" id="kasir-id-siswa">
                             <div class="mb-2"><label class="small">Nama Siswa Terpilih</label><input type="text" class="form-control fw-bold" id="kasir-display-nama" readonly></div>
                             <div class="mb-2"><label class="small">Kelas</label><input type="text" class="form-control" id="kasir-display-kelas" readonly></div>
-                            <div class="mb-2"><label class="small">Nominal Bayar (Otomatis)</label><input type="number" class="form-control fw-bold text-success" id="kasir-nominal" required></div>
+                            <div class="mb-2"><label class="small">Nominal Bayar</label><input type="number" class="form-control fw-bold text-success" id="kasir-nominal" required></div>
                             <div class="mb-2"><label class="small">Untuk Tagihan Bulan</label><select id="kasir-bulan" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                             <div class="mb-3"><label class="small">Metode Transaksi</label><select id="kasir-metode" class="form-select"><option>Tunai</option><option>Transfer Bank</option><option>QRIS</option></select></div>
-                            <button type="submit" class="btn btn-theme w-100 py-2">Proses Pembayaran & Buat Kuitansi</button>
+                            <button type="submit" class="btn btn-theme w-100 py-2">Proses & Terbitkan Kuitansi</button>
                         </form>
                     </div>
                 </div>
@@ -242,63 +242,100 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: REKAP ABSENSI MATRIKS -->
         <div id="tab-adm-rekap" class="sub-panel-admin d-none">
             <div class="card p-4">
-                <h4 class="fw-bold text-success mb-3">Buku Rekap Presensi Bulanan Matriks</h4>
+                <h5 class="fw-bold text-success mb-3">Buku Rekap Presensi Bulanan Matriks</h5>
                 <div class="row g-2 mb-4 align-items-end">
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Bulan Rekap</label><select id="rkp-bulan" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Spesifik</label><select id="rkp-kelas" class="form-select"><option value="Semua">-- Pilih Satu Kelas --</option></select></div>
-                    <div class="col-md-4"><button class="btn btn-theme w-100 py-2" onclick="prosesHitungMatriksAbsen()"><i class="fa fa-sync"></i> Tarik & Susun Matriks</button></div>
+                    <div class="col-md-4"><button class="btn btn-theme w-100 py-2" onclick="prosesHitungMatriksAbsen()"><i class="fa fa-sync"></i> Susun Matriks</button></div>
                 </div>
-                <div id="print-area-matriks" class="table-responsive p-2">
-                    <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas untuk menyusun laporan matriks.</p>
+                
+                <div id="print-area-matriks" class="p-2">
+                    <div class="header-cetak-formal text-center">
+                        <h2 style="font-weight: 800; margin:0;">BIMBEL SAKHA EDUCATION HUB</h2>
+                        <p style="margin:2px 0; font-size:0.9rem;">LAPORAN BULANAN KEHADIRAN AKTIVITAS BELAJAR SISWA</p>
+                        <h5 style="font-weight: bold; margin-top:5px;" id="lbl-formal-meta">Kelas: - | Bulan Administrasi: -</h5>
+                        <p class="text-end small style-mini-date" style="font-size:0.8rem; margin:0;" id="lbl-formal-tglcetak">Tanggal Cetak: -</p>
+                    </div>
+                    <div id="core-matriks-table-inside" class="table-responsive">
+                        <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas untuk menyusun laporan matriks.</p>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="tab-adm-jurnal" class="sub-panel-admin d-none">
+            <div class="card p-4">
+                <h5 class="fw-bold text-dark mb-3"><i class="fa fa-eye"></i> Monitoring Jurnal Mengajar Seluruh Guru</h5>
+                <div class="table-responsive"><table class="table table-bordered table-striped align-middle small"><thead class="table-dark"><tr><th>Tanggal</th><th>Kelas</th><th>Materi Pembahasan</th><th>Catatan Kelas & Kasus</th><th>Tugas Rumah (PR)</th></tr></thead><tbody id="tbody-admin-pantau-jurnal"></tbody></table></div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== DASHBOARD GURU ==================== -->
     <div id="panel-guru" class="d-none">
         <ul class="nav nav-pills mb-4 justify-content-center shadow-sm p-2 bg-white rounded-3" id="guruTabs">
             <li class="nav-item"><button class="nav-link active" onclick="bukaTabGuru('absen')"><i class="fa fa-check-square me-1"></i> Isian Absen Siswa</button></li>
             <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('jurnal')"><i class="fa fa-book me-1"></i> Jurnal Mengajar</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('media')"><i class="fa fa-cloud-upload-alt me-1"></i> Upload Media Belajar</button></li>
         </ul>
 
-        <!-- SUB GURU: INPUT ABSEN -->
         <div id="tab-gru-absen" class="sub-panel-guru">
             <div class="card p-4">
-                <h4 class="fw-bold text-success mb-3">Input Kehadiran Kelas Harian</h4>
+                <h5 class="fw-bold text-success mb-3">Input Kehadiran Kelas Harian</h5>
                 <div class="row g-2 mb-4">
                     <div class="col-md-4"><label class="small fw-semibold">Tanggal Kegiatan Les</label><input type="date" class="form-control" id="absen-input-tgl" required></div>
                     <div class="col-md-4"><label class="small fw-semibold">Bulan Administrasi (Siasat Hari Pengganti)</label><select id="absen-input-bulan-target" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Mengajar</label><select id="absen-input-kelas" class="form-select" onchange="tarikSiswaUntukAbsenGuru(this.value)"><option value="">-- Pilih Kelas --</option></select></div>
                 </div>
+                <div class="alert alert-info py-2 small"><i class="fa fa-info-circle"></i> <b>Catatan Sistem:</b> Jika menginput pada tanggal & kelas yang sama dengan data lama, aplikasi akan otomatis memperbarui (overwrite) data lama agar tidak terjadi penumpukan.</div>
                 <hr>
-                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan kelas di atas untuk memunculkan daftar siswa otomatis.</td></tr></tbody></table></div>
-                <button class="btn btn-theme w-100 py-3 rounded-3 shadow fw-bold" onclick="kunciKirimAbsenGuruMassal()"><i class="fa fa-lock"></i> Kunci & Kirim Data Absensi Ke Server</button>
+                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan kelas di atas untuk memunculkan daftar siswa.</td></tr></tbody></table></div>
+                <button class="btn btn-theme w-100 py-3 rounded-3 shadow fw-bold" onclick="kunciKirimAbsenGuruMassal()"><i class="fa fa-lock"></i> Kunci & Kirim Data Absensi</button>
             </div>
         </div>
 
-        <!-- SUB GURU: JURNAL -->
         <div id="tab-gru-jurnal" class="sub-panel-guru d-none">
-            <div class="card p-4 style-jurnal-box" style="max-width: 650px; margin: 0 auto;">
-                <h4 class="fw-bold text-success mb-3">Pengisian Jurnal Mengajar</h4>
-                <form id="form-submit-jurnal-guru">
-                    <div class="mb-3"><label class="small fw-semibold">Tanggal Mengajar</label><input type="date" class="form-control" id="jrn-tgl" required></div>
-                    <div class="mb-3"><label class="small fw-semibold">Kelas Les Terkait</label><select id="jrn-kelas" class="form-select" required></select></div>
-                    <div class="mb-3"><label class="small fw-semibold">Materi / Topik Pembahasan Bab</label><input type="text" class="form-control" id="jrn-materi" placeholder="Misal: Operasi Aljabar Pecahan" required></div>
-                    <div class="mb-3"><label class="small fw-semibold">Catatan Penting Perkembangan Siswa</label><textarea class="form-control" id="jrn-catatan" rows="3" placeholder="Tulis kendala pemahaman siswa hari ini..." required></textarea></div>
-                    <div class="mb-3"><label class="small fw-semibold">Pekerjaan Rumah (PR) Siswa</label><input type="text" class="form-control" id="jrn-pr" placeholder="Tulis 'Tidak ada PR' jika nihil" required></div>
-                    <button type="submit" class="btn btn-theme w-100 py-2">Kirim Jurnal Mengajar</button>
+            <div class="row">
+                <div class="col-md-5 mb-4">
+                    <div class="card p-4">
+                        <h5 class="fw-bold text-success mb-3">Pengisian Jurnal Mengajar</h5>
+                        <form id="form-submit-jurnal-guru">
+                            <div class="mb-3"><label class="small fw-semibold">Tanggal Mengajar</label><input type="date" class="form-control" id="jrn-tgl" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Kelas Les Terkait</label><select id="jrn-kelas" class="form-select" required></select></div>
+                            <div class="mb-3"><label class="small fw-semibold">Materi / Topik Pembahasan Bab</label><input type="text" class="form-control" id="jrn-materi" placeholder="Misal: Operasi Aljabar Pecahan" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Catatan Kasus / Perkembangan Kelas</label><textarea class="form-control" id="jrn-catatan" rows="3" placeholder="Tulis kendala pemahaman atau kejadian penting..." required></textarea></div>
+                            <div class="mb-3"><label class="small fw-semibold">Pekerjaan Rumah (PR) Siswa</label><input type="text" class="form-control" id="jrn-pr" placeholder="Tulis 'Tidak ada' jika nihil" required></div>
+                            <button type="submit" class="btn btn-theme w-100 py-2">Kirim Jurnal Mengajar</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card p-4">
+                        <h5 class="fw-bold text-dark mb-3"><i class="fa fa-history"></i> Rekam Riwayat Mengajar Bimbel</h5>
+                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Tanggal/Kelas</th><th>Materi Bahasan</th><th>Catatan Kasus Kelas</th></tr></thead><tbody id="tbody-guru-history-jurnal"></tbody></table></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-gru-media" class="sub-panel-guru d-none">
+            <div class="card p-4" style="max-width: 600px; margin: 0 auto;">
+                <h5 class="fw-bold text-success mb-3"><i class="fa fa-cloud-upload-alt"></i> Upload & Distribusi Media Belajar Digital</h5>
+                <form id="form-upload-media-guru">
+                    <div class="mb-2"><label class="small fw-semibold">Target Kelas Jenjang</label><select id="med-kelas" class="form-select" required></select></div>
+                    <div class="mb-2"><label class="small fw-semibold">Mata Pelajaran</label><input type="text" class="form-control" id="med-mapel" placeholder="Misal: Matematika" required></div>
+                    <div class="mb-2"><label class="small fw-semibold">Judul Materi Pembahasan</label><input type="text" class="form-control" id="med-judul" placeholder="Misal: Rumus Pythagoras Kls 8" required></div>
+                    <div class="mb-2"><label class="small fw-semibold">Link Google Drive Modul PDF</label><input type="url" class="form-control" id="med-pdf" placeholder="https://drive.google.com/..." required></div>
+                    <div class="mb-2"><label class="small fw-semibold">Link YouTube Penjelasan Video</label><input type="url" class="form-control" id="med-yt" placeholder="https://youtube.com/..." required></div>
+                    <div class="mb-3"><label class="small fw-semibold">Link Latihan Kuis Online (Google Form/Quizizz)</label><input type="url" class="form-control" id="med-kuis" placeholder="https://quizizz.com/..." required></div>
+                    <button type="submit" class="btn btn-theme w-100 py-2">Upload & Bagikan ke Murid</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ==================== DASHBOARD SISWA ==================== -->
     <div id="panel-siswa" class="d-none">
-        <!-- Papan Info Digital Pengumuman Bimbel Profesional -->
         <div class="alert bg-white p-4 border border-success-subtle rounded-3 mb-4 shadow-sm text-start">
             <h5 class="fw-bold text-success mb-1"><i class="fa fa-bullhorn animate-bounce"></i> PAPAN PENGUMUMAN RESMI SAKHA</h5>
             <div id="papan-pengumuman-siswa-area" class="text-muted small">Memuat info terbaru...</div>
@@ -313,7 +350,6 @@
 
 </div>
 
-<!-- MODAL POP UP KUITANSI DIGITAL KASIR -->
 <div class="modal fade" id="modalKuitansi" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -338,7 +374,7 @@
                     <p style="font-size: 0.7rem; margin-top: 15px; color:#555;">Kuitansi sah dibuat otomatis sistem digital.<br>Petugas Penerima: <span id="k-petugas">-</span></p>
                 </div>
                 <div class="mt-4 gap-2 d-flex justify-content-center">
-                    <button class="btn btn-dark" onclick="cetakKuitansiFisik()"><i class="fa fa-print"></i> Cetak Dokumen</button>
+                    <button class="btn btn-dark" onclick="cetakKuitansiIframe()"><i class="fa fa-print"></i> Cetak Dokumen</button>
                     <button class="btn btn-success" id="btn-wa-kuitansi"><i class="fab fa-whatsapp"></i> Bagikan Ke WA Ortu</button>
                 </div>
             </div>
@@ -346,15 +382,13 @@
     </div>
 </div>
 
-<!-- FOOTER INTEGRAL LEGALITAS PATEN 3D CREATIVE -->
-<footer class="py-3 text-center w-100">
+<footer class="py-3 text-center w-100 no-print">
     <div class="container">
         <p class="m-0 fw-semibold">&copy; 2026 Bimbel SAKHA. All Rights Reserved.</p>
         <p class="m-0 text-white-50" style="font-size: 0.75rem; letter-spacing: 0.5px;">Powered & Patented by <b class="text-warning">3D Creative</b></p>
     </div>
 </footer>
 
-<!-- JavaScript Framework Jquery, Bootstrap, SweetAlert, Engine Core -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -363,11 +397,10 @@
     // MASUKKAN URL GENERATE APPS SCRIPT ANDA DI SINI
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeNdThITssgEz_sIn1C93NX75R4z0TW6PF_Nz3_I_scu0Hkz6okXpWJ1JFmcgEv2bw/exec";
     
-    // Global Memory State Data Aplikasi
-    let CACHE_DATA = { siswa: [], keuangan: [], absen: [], media: [], pengumuman: [] };
+    let CACHE_DATA = { siswa: [], keuangan: [], absen: [], media: [], pengumuman: [], jurnal: [], akun: [] };
     let USER_SESSION = { role: "", nama: "", id: "" };
 
-    // Utilitas Pengubah Format No HP Otomatis ke Kode Negara 62
+    // Validasi & Perbaikan Awalan Kode Negara WA (Poin 7)
     function normalisasiNomorWA(phone) {
         let clean = phone.toString().replace(/[^0-9]/g, '');
         if (clean.startsWith('0')) {
@@ -376,7 +409,6 @@
         return clean;
     }
 
-    // ANIMASI LOADING OVERLAY
     function toggleLoading(show, message = "Sedang berkomunikasi dengan server SAKHA...") {
         const overlay = document.getElementById("loading-overlay");
         document.getElementById("loading-text").innerText = message;
@@ -384,12 +416,11 @@
         else overlay.classList.add("d-none");
     }
 
-    // INTERAKSI LOGIN
+    // AUTH LOGIN PROCESS
     document.getElementById("form-login-proses").addEventListener("submit", function(e) {
         e.preventDefault();
         const user = document.getElementById("input-username").value;
         const pass = document.getElementById("input-password").value;
-        
         toggleLoading(true, "Memverifikasi hak akses akun Anda...");
         
         fetch(SCRIPT_URL, {
@@ -412,15 +443,15 @@
             } else {
                 Swal.fire({ icon: 'error', title: 'Login Gagal!', text: res.message });
             }
-        }).catch(err => {
+        }).catch(() => {
             toggleLoading(false);
-            Swal.fire({ icon: 'error', title: 'Kegagalan Sistem!', text: 'Terjadi masalah jaringan server.' });
+            Swal.fire({ icon: 'error', title: 'Error Jaringan!', text: 'Terjadi masalah koneksi ke server.' });
         });
     });
 
-    // AMBIL DATA DARI SERVER
+    // PULL DATABASE FRESH
     function pullDatabaseFresh() {
-        toggleLoading(true, "Sinkronisasi seluruh data terupdate database...");
+        toggleLoading(true, "Sinkronisasi seluruh basis data terupdate...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "getData" }) })
         .then(res => res.json())
         .then(data => {
@@ -432,13 +463,16 @@
             
             if(USER_SESSION.role === "Admin") {
                 tampilkanTabelSiswa();
+                tampilkanTabelGuruAdmin();
                 tampilkanTabelMonitorTagihan();
+                tampilkanTabelPantauJurnalAdmin();
+            } else if(USER_SESSION.role === "Guru") {
+                tampilkanHistoryJurnalGuru();
             } else if(USER_SESSION.role === "Siswa") {
                 tampilkanRuangMediaSiswa();
                 tampilkanPapanPengumumanSiswa();
             }
             
-            // Tampilkan Panel Utama yang sesuai
             document.getElementById("panel-admin").classList.add("d-none");
             document.getElementById("panel-guru").classList.add("d-none");
             document.getElementById("panel-siswa").classList.add("d-none");
@@ -452,35 +486,31 @@
         });
     }
 
-    // HITUNG STATISTIK DASHBOARD ADMIN SECARA OTOMATIS (AUDIT PROFESIONAL)
     function hitungKalkulasiDashboardStatistik() {
         const tSiswa = Math.max(0, CACHE_DATA.siswa.length - 1);
         document.getElementById("stat-total-siswa").innerText = tSiswa + " anak";
         
         let totalUang = 0;
         const keu = CACHE_DATA.keuangan;
-        for(let i=1; i<keu.length; i++) {
-            totalUang += Number(keu[i][4] || 0);
-        }
+        for(let i=1; i<keu.length; i++) { totalUang += Number(keu[i][4] || 0); }
         document.getElementById("stat-total-uang").innerText = "Rp " + totalUang.toLocaleString('id-ID');
         
         let setKelas = new Set();
         const sis = CACHE_DATA.siswa;
         for(let i=1; i<sis.length; i++) {
-            if(sis[i][2] && sis[i][8] === "Aktif") setKelas.add(sis[i][2]);
+            if(sis[i][2] && sis[i][8] === "Aktif") setKelas.add(sis[i][2].toString().toUpperCase());
         }
         document.getElementById("stat-total-kelas").innerText = setKelas.size + " Kelas Aktif";
     }
 
-    // DROPDOWN KELAS OTOMATIS BERDASARKAN INPUT GOOGLE SHEET (ANTI KAKU)
     function generateDropdownKelasDinamis() {
         let setKelas = new Set();
         const rows = CACHE_DATA.siswa;
         for(let i=1; i<rows.length; i++) {
-            if(rows[i][2]) setKelas.add(rows[i][2].toString().toUpperCase());
+            if(rows[i][2]) setKelas.add(rows[i][2].toString().toUpperCase().trim());
         }
         
-        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "absen-input-kelas", "jrn-kelas"];
+        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "absen-input-kelas", "jrn-kelas", "med-kelas"];
         listDropdownId.forEach(id => {
             const el = document.getElementById(id);
             if(!el) return;
@@ -495,11 +525,11 @@
         });
     }
 
-    // NAVIGASI SUB TAB DASHBOARD
+    // NAVIGASI SUB TAB
     function bukaTabAdmin(target) {
         document.querySelectorAll(".sub-panel-admin").forEach(p => p.classList.add("d-none"));
         document.querySelectorAll("#adminTabs .nav-link").forEach(l => l.classList.remove("active"));
-        document.getElementById("tab-adm(" + target + ")") ? document.getElementById("tab-adm(" + target + ")").classList.remove("d-none") : document.getElementById("tab-adm-" + target).classList.remove("d-none");
+        document.getElementById("tab-adm-" + target).classList.remove("d-none");
         event.target.classList.add("active");
     }
     function bukaTabGuru(target) {
@@ -509,13 +539,13 @@
         event.target.classList.add("active");
     }
 
-    // ADMIN FITUR: INPUT DATA MURID BARU
+    // REGISTRASI SISWA BARU
     document.getElementById("form-add-siswa").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
             action: "inputSiswa",
             nama: document.getElementById("form-s-nama").value,
-            kelas: document.getElementById("form-s-kelas").value.toUpperCase().trim(),
+            kelas: document.getElementById("form-s-kelas").value,
             sekolah: document.getElementById("form-s-sekolah").value,
             hpOrtu: document.getElementById("form-s-hportu").value,
             hpSiswa: document.getElementById("form-s-hpsiswa").value,
@@ -523,13 +553,13 @@
             tglDaftar: new Date().toLocaleDateString('id-ID')
         };
         
-        toggleLoading(true, "Mendaftarkan siswa dan merancang otomatis credentials akun...");
+        toggleLoading(true, "Mendaftarkan siswa & menyusun credentials otomatis...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Berhasil Terdaftar', text: res.message });
+                Swal.fire({ icon: 'success', title: 'Berhasil', text: res.message });
                 document.getElementById("form-add-siswa").reset();
                 pullDatabaseFresh();
             }
@@ -540,11 +570,10 @@
         const filter = document.getElementById("dropdown-filter-siswa").value;
         const tbody = document.getElementById("tbody-tabel-siswa");
         tbody.innerHTML = "";
-        
         const rows = CACHE_DATA.siswa;
         for(let i=1; i<rows.length; i++) {
             let id = rows[i][0], nama = rows[i][1], kelas = rows[i][2], sek = rows[i][3], hp = rows[i][4];
-            if(filter !== "Semua" && kelas !== filter) continue;
+            if(filter !== "Semua" && kelas.toString().toUpperCase() !== filter.toUpperCase()) continue;
             
             let urlWA = "https://wa.me/" + normalisasiNomorWA(hp);
             tbody.innerHTML += `<tr>
@@ -557,23 +586,58 @@
         }
     }
 
-    // ADMIN FITUR: KASIR SPP & MESIN CARI AUTO 3 HURUF
+    // REGISTRASI GURU BARU (POIN 2)
+    document.getElementById("form-add-guru").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const payload = {
+            action: "inputGuru",
+            nama: document.getElementById("form-g-nama").value,
+            mapel: document.getElementById("form-g-mapel").value
+        };
+        toggleLoading(true, "Mendaftarkan tenaga pengajar baru...");
+        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(res => {
+            toggleLoading(false);
+            if(res.status === "success") {
+                Swal.fire({ icon: 'success', title: 'Guru Terdaftar', text: res.message });
+                document.getElementById("form-add-guru").reset();
+                pullDatabaseFresh();
+            }
+        });
+    });
+
+    function tampilkanTabelGuruAdmin() {
+        const tbody = document.getElementById("tbody-tabel-guru");
+        tbody.innerHTML = "";
+        const rows = CACHE_DATA.akun;
+        for(let i=1; i<rows.length; i++) {
+            if(rows[i][2] === "Guru") {
+                tbody.innerHTML += `<tr>
+                    <td><span class="badge bg-primary">${rows[i][4]}</span></td>
+                    <td><b>${rows[i][3]}</b></td>
+                    <td><code class="text-danger">${rows[i][0]}</code></td>
+                </tr>`;
+            }
+        }
+    }
+
+    // KASIR & MESIN CARI
     function mesinCariKasir(keyword) {
         const box = document.getElementById("container-search-kasir");
         box.innerHTML = "";
         if(keyword.trim().length < 3) return;
-        
         const rows = CACHE_DATA.siswa;
-        let limit = 0;
+        let count = 0;
         for(let i=1; i<rows.length; i++) {
             let id = rows[i][0], nama = rows[i][1], kelas = rows[i][2], spp = rows[i][7], status = rows[i][8];
             if(status === "Aktif" && nama.toLowerCase().includes(keyword.toLowerCase())) {
-                limit++;
+                count++;
                 box.innerHTML += `<button type="button" class="list-group-item list-group-item-action text-start btn-sm" onclick="kunciSiswaPilihanKasir('${id}', '${nama}', '${kelas}', '${spp}')">
-                    🔍 <b>${nama}</b> - Kelas ${kelas} (ID: ${id})
+                    🔍 <b>${nama}</b> - Kelas ${kelas} (${id})
                 </button>`;
             }
-            if(limit >= 5) break;
+            if(count >= 5) break;
         }
     }
 
@@ -581,7 +645,7 @@
         document.getElementById("kasir-id-siswa").value = id;
         document.getElementById("kasir-display-nama").value = nama;
         document.getElementById("kasir-display-kelas").value = "Kelas " + kelas;
-        document.getElementById("kasir-nominal").value = spp; // AUTO-FILLED NOMINAL SPP BAWAAN
+        document.getElementById("kasir-nominal").value = spp;
         document.getElementById("container-search-kasir").innerHTML = "";
         document.getElementById("search-kasir-nama").value = "";
     }
@@ -589,25 +653,20 @@
     document.getElementById("form-proses-kasir").addEventListener("submit", function(e) {
         e.preventDefault();
         const idS = document.getElementById("kasir-id-siswa").value;
-        if(!idS) return Swal.fire({ icon: 'warning', title: 'Siswa Belum Dipilih', text: 'Gunakan filter ketik minimal 3 huruf terlebih dahulu.' });
+        if(!idS) return Swal.fire({ icon: 'warning', title: 'Siswa Belum Dipilih' });
         
         const payload = {
-            action: "bayarSPP",
-            idSiswa: idS,
-            tglBayar: new Date().toLocaleDateString('id-ID'),
-            bulan: document.getElementById("kasir-bulan").value,
-            jumlah: document.getElementById("kasir-nominal").value,
-            metode: document.getElementById("kasir-metode").value,
-            penerima: USER_SESSION.nama
+            action: "bayarSPP", idSiswa: idS, tglBayar: new Date().toLocaleDateString('id-ID'),
+            bulan: document.getElementById("kasir-bulan").value, jumlah: document.getElementById("kasir-nominal").value,
+            metode: document.getElementById("kasir-metode").value, penerima: USER_SESSION.nama
         };
         
-        toggleLoading(true, "Mengamankan transaksi & menerbitkan invoice digital...");
+        toggleLoading(true, "Memproses kwitansi keuangan...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                // Tembak Data Ke Kuitansi Dom Pop-Up
                 document.getElementById("k-invoice").innerText = res.idBayar;
                 document.getElementById("k-tanggal").innerText = payload.tglBayar;
                 document.getElementById("k-idsiswa").innerText = payload.idSiswa;
@@ -618,30 +677,39 @@
                 document.getElementById("k-total").innerText = "Rp " + Number(payload.jumlah).toLocaleString('id-ID');
                 document.getElementById("k-petugas").innerText = payload.penerima;
                 
-                // Ambil info HP Ortu untuk tombol Share WA
                 let infoAnak = CACHE_DATA.siswa.find(s => s[0] === idS);
                 let hpO = infoAnak ? infoAnak[4] : "";
-                let msgText = window.encodeURIComponent("Terima kasih. Pembayaran SPP Bimbel SAKHA untuk adik *" + document.getElementById("kasir-display-nama").value + "* bulan *" + payload.bulan + "* sebesar *Rp " + Number(payload.jumlah).toLocaleString('id-ID') + "* TELAH BERHASIL DITERIMA via " + payload.metode + ".\nNo Invoice: " + res.idBayar);
+                let msgText = window.encodeURIComponent("Terima kasih. Pembayaran SPP Bimbel SAKHA untuk adik *" + document.getElementById("kasir-display-nama").value + "* bulan *" + payload.bulan + "* sebesar *Rp " + Number(payload.jumlah).toLocaleString('id-ID') + "* TELAH BERHASIL DITERIMA.\nNo Invoice: " + res.idBayar);
                 document.getElementById("btn-wa-kuitansi").onclick = function() {
                     window.open("https://wa.me/" + normalisasiNomorWA(hpO) + "?text=" + msgText, "_blank");
                 };
                 
-                // Munculkan Modal Kuitansi Profesional
                 const myModal = new bootstrap.Modal(document.getElementById('modalKuitansi'));
                 myModal.show();
-                
                 document.getElementById("form-proses-kasir").reset();
                 document.getElementById("kasir-id-siswa").value = "";
             }
         });
     });
 
-    function cetakKuitansiFisik() {
-        const area = document.getElementById("printable-kuitansi").innerHTML;
-        const windowsLama = document.body.innerHTML;
-        document.body.innerHTML = "<div style='padding:40px; background:white; text-align:center;'>" + area + "</div>";
-        window.print();
-        window.location.reload(); // Refresh untuk mengembalikan state DOM semula
+    // FIX CETAK KUITANSI VIA IFRAME TERSEMBUNYI (ANTI-BLANK POIN 6)
+    function cetakKuitansiIframe() {
+        const konten = document.getElementById("printable-kuitansi").innerHTML;
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.width = '0px';
+        iframe.style.height = '0px';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+        
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(`<html><head><title>Cetak Kuitansi SAKHA</title>
+        <style>body{font-family:'Courier New',monospace; padding:20px; text-align:center;}</style>
+        </head><body onload="window.print();window.close();">${konten}</body></html>`);
+        doc.close();
+        
+        setTimeout(() => document.body.removeChild(iframe), 2000);
     }
 
     function tampilkanTabelMonitorTagihan() {
@@ -652,187 +720,153 @@
         
         let mapLunas = {};
         const keu = CACHE_DATA.keuangan;
-        for(let i=1; i<keu.length; i++) {
-            if(keu[i][3] === bln) mapLunas[keu[i][1]] = true;
-        }
+        for(let i=1; i<keu.length; i++) { if(keu[i][3] === bln) mapLunas[keu[i][1]] = true; }
         
         const sis = CACHE_DATA.siswa;
         for(let i=1; i<sis.length; i++) {
             let id = sis[i][0], nama = sis[i][1], kelas = sis[i][2], hpO = sis[i][4], status = sis[i][8];
             if(status !== "Aktif") continue;
-            if(kls !== "Semua" && kelas !== kls) continue;
+            if(kls !== "Semua" && kelas.toString().toUpperCase() !== kls.toUpperCase()) continue;
             
-            let isLunas = mapMap = mapLunas[id] ? true : false;
-            let badge = isLunas ? `<span class="badge bg-success-subtle text-success py-2 px-3 rounded-pill fw-bold">✅ Lunas</span>` : `<span class="badge bg-danger-subtle text-danger py-2 px-3 rounded-pill fw-bold">❌ Belum Bayar</span>`;
+            let isLunas = mapLunas[id] ? true : false;
+            let badge = isLunas ? `<span class="badge bg-success-subtle text-success fw-bold">✅ Lunas</span>` : `<span class="badge bg-danger-subtle text-danger fw-bold">❌ Belum Bayar</span>`;
             
-            let waMsg = window.encodeURIComponent("Halo Ayah/Bunda dari *" + nama + "*, kami dari Admin Bimbel SAKHA menginfokan bahwa catatan administrasi iuran SPP putra/putri Anda untuk bulan *" + bln + "* belum terdata di sistem kami. Mohon untuk melakukan konfirmasi. Terima kasih banyak.");
+            let waMsg = window.encodeURIComponent("Halo Ayah/Bunda dari *" + nama + "*, kami dari Admin Bimbel SAKHA menginfokan bahwa iuran SPP untuk bulan *" + bln + "* belum terdata. Mohon konfirmasinya. Terima kasih.");
             let waUrl = "https://wa.me/" + normalisasiNomorWA(hpO) + "?text=" + waMsg;
+            let btnAction = isLunas ? `<button class="btn btn-sm btn-light border" disabled>Aman</button>` : `<a href="${waUrl}" target="_blank" class="btn btn-sm btn-outline-danger rounded-pill fw-bold">Hubungi</a>`;
             
-            let btnAction = isLunas ? `<button class="btn btn-sm btn-light border text-muted" disabled><i class="fa fa-check"></i> Aman</button>` : `<a href="${waUrl}" target="_blank" class="btn btn-sm btn-outline-danger px-3 rounded-pill fw-bold"><i class="fab fa-whatsapp"></i> Hubungi</a>`;
-            
-            tbody.innerHTML += `<tr>
-                <td><b>${nama}</b></td>
-                <td><span class="badge bg-secondary">Kelas ${kelas}</span></td>
-                <td>${badge}</td>
-                <td>${btnAction}</td>
-            </tr>`;
+            tbody.innerHTML += `<tr><td><b>${nama}</b></td><td><span class="badge bg-secondary">Kelas ${kelas}</span></td><td>${badge}</td><td>${btnAction}</td></tr>`;
         }
     }
 
-    // ADMIN FITUR: HITUNG & SUSUN MATRIKS ABSENSI HORIZONTAL + FITUR CETAK
+    // SUSUN REKAP MATRIKS DENGAN IDENTITAS FORMAL CETAK (POIN 8)
     function prosesHitungMatriksAbsen() {
         const bln = document.getElementById("rkp-bulan").value;
         const kls = document.getElementById("rkp-kelas").value;
-        const container = document.getElementById("print-area-matriks");
+        const inside = document.getElementById("core-matriks-table-inside");
         
         if(kls === "Semua") {
-            container.innerHTML = "<div class='alert alert-danger text-center'>Harap pilih satu kelas spesifik untuk memproses visualisasi matriks.</div>";
+            inside.innerHTML = "<div class='alert alert-danger text-center'>Pilih kelas spesifik untuk menarik matriks.</div>";
             return;
         }
+        
+        // Atur Konten Header Formal Cetak (Poin 8)
+        document.getElementById("lbl-formal-meta").innerText = `Kelas: ${kls} | Bulan Administrasi: ${bln}`;
+        document.getElementById("lbl-formal-tglcetak").innerText = `Tanggal Cetak Dokumen: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID')}`;
         
         const logAbsen = CACHE_DATA.absen;
         let setTanggal = new Set();
         for(let i=1; i<logAbsen.length; i++) {
-            if(logAbsen[i][2] === bln && logAbsen[i][3].toString().toUpperCase() === kls.toString().toUpperCase()) {
-                setTanggal.add(logAbsen[i][1]);
-            }
+            if(logAbsen[i][2] === bln && logAbsen[i][3].toString().toUpperCase() === kls.toUpperCase()) { setTanggal.add(logAbsen[i][1]); }
         }
         let arrTgl = Array.from(setTanggal).sort();
-        
         if(arrTgl.length === 0) {
-            container.innerHTML = "<div class='alert alert-warning text-center fw-bold py-4'>Tidak ditemukan rekam data presensi kelas " + kls + " pada bulan " + bln + ".</div>";
+            inside.innerHTML = "<div class='alert alert-warning text-center fw-bold'>Tidak ditemukan rekam data absensi.</div>";
             return;
         }
         
         let matriks = {};
         for(let i=1; i<logAbsen.length; i++) {
             let tgl = logAbsen[i][1], bTarget = logAbsen[i][2], kTarget = logAbsen[i][3], nama = logAbsen[i][4], stat = logAbsen[i][5];
-            if(bTarget === bln && kTarget.toString().toUpperCase() === kls.toString().toUpperCase()) {
+            if(bTarget === bln && kTarget.toString().toUpperCase() === kls.toUpperCase()) {
                 if(!matriks[nama]) matriks[nama] = {};
                 matriks[nama][tgl] = stat;
             }
         }
         
-        let html = `<div class="d-flex justify-content-between align-items-center mb-2 no-print">
-            <span class="small text-muted">*Gunakan tombol di samping untuk mencetak laporan matriks ini</span>
-            <button class="btn btn-sm btn-dark px-3" onclick="window.print()"><i class="fa fa-print"></i> Cetak Laporan Presensi</button>
-        </div>`;
-        html += `<table class="table table-bordered table-striped align-middle text-center small">
-            <thead class="table-dark"><tr><th class="text-start">Nama Murid (${kls})</th>`;
-        
-        arrTgl.forEach(t => {
-            let p = t.split('/');
-            html += `<th>${p[0]}/${p[1]}</th>`;
-        });
+        let html = `<div class="d-flex justify-content-end mb-3 no-print"><button class="btn btn-sm btn-dark px-4" onclick="window.print()"><i class="fa fa-print"></i> Cetak Laporan Presensi Resmi</button></div>`;
+        html += `<table class="table table-bordered table-striped align-middle text-center small"><thead class="table-dark"><tr><th class="text-start">Nama Murid</th>`;
+        arrTgl.forEach(t => { html += `<th>${t.split('/')[0]}/${t.split('/')[1]}</th>`; });
         html += `<th>Total H</th><th>%</th></tr></thead><tbody>`;
-        
-        let kolomFooterCounter = {};
-        arrTgl.forEach(t => kolomFooterCounter[t] = 0);
         
         for(let nama in matriks) {
             html += `<tr><td class="text-start fw-bold">${nama}</td>`;
-            let countH = 0;
+            let cH = 0;
             arrTgl.forEach(t => {
-                let status = matriks[nama][t] || "-";
-                let textClass = "text-muted";
-                if(status === "H") { countH++; kolomFooterCounter[t]++; textClass="text-success fw-bold"; }
-                if(status === "S") textClass="text-primary fw-bold";
-                if(status === "I") textClass="text-warning fw-bold";
-                if(status === "A") textClass="text-danger fw-bold";
-                
-                html += `<td class="${textClass}">${status}</td>`;
+                let s = matriks[nama][t] || "-";
+                let tC = "text-muted";
+                if(s === "H") { cH++; tC="text-success fw-bold"; }
+                if(s === "S") tC="text-primary fw-bold";
+                if(s === "I") textC="text-warning fw-bold";
+                if(s === "A") tC="text-danger fw-bold";
+                html += `<td class="${tC}">${s}</td>`;
             });
-            let prs = Math.round((countH / arrTgl.length) * 100);
-            html += `<td class="text-success fw-bold">${countH}/${arrTgl.length}</td><td class="fw-bold text-dark">${prs}%</td></tr>`;
+            html += `<td class="text-success fw-bold">${cH}/${arrTgl.length}</td><td class="fw-bold">${Math.round((cH/arrTgl.length)*100)}%</td></tr>`;
         }
-        
-        html += `<tr class="table-light fw-bold text-dark text-center"><td class="text-start">Jumlah Hadir</td>`;
-        arrTgl.forEach(t => { html += `<td>${kolomFooterCounter[t]}</td>`; });
-        html += `<td colspan="2"></td></tr></tbody></table>`;
-        
-        container.innerHTML = html;
+        html += `</tbody></table>`;
+        inside.innerHTML = html;
     }
 
-    // GURU FITUR: RENDER PRESENSI KILAT (DEFAULT TERISI HADIR (H))
+    // PANTAU JURNAL DI SISI ADMIN (POIN 4)
+    function tampilkanTabelPantauJurnalAdmin() {
+        const tbody = document.getElementById("tbody-admin-pantau-jurnal");
+        tbody.innerHTML = "";
+        const rows = CACHE_DATA.jurnal;
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='5' class='text-center'>Belum ada jurnal mengajar.</td></tr>"; return; }
+        for(let i=rows.length-1; i>=1; i--) {
+            tbody.innerHTML += `<tr><td>${rows[i][1]}</td><td><span class="badge bg-dark">Kelas ${rows[i][2]}</span></td><td><b>${rows[i][3]}</b></td><td>${rows[i][4]}</td><td><span class="text-danger">${rows[i][5]}</span></td></tr>`;
+        }
+    }
+
+    // GURU ABSENSI KILAT
     function tarikSiswaUntukAbsenGuru(kelas) {
         const tbody = document.getElementById("tbody-guru-absen");
         tbody.innerHTML = "";
         if(!kelas) return;
-        
         const sis = CACHE_DATA.siswa;
-        let urutan = 0;
-        let adaSiswa = false;
-        
+        let idx = 0;
         for(let i=1; i<sis.length; i++) {
-            let nama = sis[i][1], kls = sis[i][2], stat = sis[i][8];
-            if(stat === "Aktif" && kls === kelas) {
-                adaSiswa = true;
-                urutan++;
+            let nama = sis[i][1], kls = sis[i][2], status = sis[i][8];
+            if(status === "Aktif" && kls.toString().toUpperCase() === kelas.toUpperCase()) {
+                idx++;
                 tbody.innerHTML += `<tr>
                     <td><b class="text-dark">${nama}</b></td>
                     <td class="text-center">
                         <div class="d-flex justify-content-center">
-                            <input type="radio" class="btn-check" name="rad_${urutan}" id="h_${urutan}" value="H" checked data-nama="${nama}">
-                            <label class="btn-check-absen lbl-h" for="h_${urutan}">H</label>
-                            
-                            <input type="radio" class="btn-check" name="rad_${urutan}" id="s_${urutan}" value="S" data-nama="${nama}">
-                            <label class="btn-check-absen lbl-s" for="s_${urutan}">S</label>
-
-                            <input type="radio" class="btn-check" name="rad_${urutan}" id="i_${urutan}" value="I" data-nama="${nama}">
-                            <label class="btn-check-absen lbl-i" for="i_${urutan}">I</label>
-
-                            <input type="radio" class="btn-check" name="rad_${urutan}" id="a_${urutan}" value="A" data-nama="${nama}">
-                            <label class="btn-check-absen lbl-a" for="a_${urutan}">A</label>
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="h_${idx}" value="H" checked data-nama="${nama}">
+                            <label class="btn-check-absen lbl-h" for="h_${idx}">H</label>
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="s_${idx}" value="S" data-nama="${nama}">
+                            <label class="btn-check-absen lbl-s" for="s_${idx}">S</label>
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="i_${idx}" value="I" data-nama="${nama}">
+                            <label class="btn-check-absen lbl-i" for="i_${idx}">I</label>
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="a_${idx}" value="A" data-nama="${nama}">
+                            <label class="btn-check-absen lbl-a" for="a_${idx}">A</label>
                         </div>
                     </td>
                 </tr>`;
             }
         }
-        if(!adaSiswa) tbody.innerHTML = "<tr><td colspan='2' class='text-center text-danger fw-bold py-3'>Tidak ada murid terdaftar aktif di kelas ini!</td></tr>";
     }
 
     function kunciKirimAbsenGuruMassal() {
         const tgl = document.getElementById("absen-input-tgl").value;
         const bTar = document.getElementById("absen-input-bulan-target").value;
         const kls = document.getElementById("absen-input-kelas").value;
-        
-        if(!tgl || !kls) return Swal.fire({ icon: 'warning', title: 'Data Belum Lengkap', text: 'Tentukan tanggal real dan kelas les!' });
+        if(!tgl || !kls) return Swal.fire({ icon: 'warning', title: 'Pilih Tanggal & Kelas!' });
         
         let records = [];
-        const checkedRadios = document.querySelectorAll("#tbody-guru-absen input[type='radio']:checked");
-        checkedRadios.forEach(rad => {
-            records.push({
-                nama: rad.getAttribute("data-nama"),
-                status: rad.value
-            });
+        document.querySelectorAll("#tbody-guru-absen input[type='radio']:checked").forEach(rad => {
+            records.push({ nama: rad.getAttribute("data-nama"), status: rad.value });
         });
         
-        if(records.length === 0) return alert("Nihil data siswa.");
-        
         const payload = {
-            action: "submitAbsen",
-            tanggal: new Date(tgl).toLocaleDateString('id-ID'),
-            bulanTarget: bTar, // LOGIKA SIASAT HARI PENGGANTI TITIP BULAN ADMINISTRASI
-            kelas: kls,
-            guru: USER_SESSION.nama,
-            records: records
+            action: "submitAbsen", tanggal: new Date(tgl).toLocaleDateString('id-ID'),
+            bulanTarget: bTar, kelas: kls, guru: USER_SESSION.nama, records: records
         };
         
-        toggleLoading(true, "Mengunci gerbang presensi harian siswa ke server...");
+        toggleLoading(true, "Mengunci & memperbarui presensi di server database...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Presensi Dikunci!', text: 'Data presensi berhasil diunggah secara aman.' });
-                document.getElementById("absen-input-kelas").value = "";
-                document.getElementById("tbody-guru-absen").innerHTML = "<tr><td colspan='2' class='text-center text-muted'>Tentukan kelas di atas untuk memunculkan daftar siswa otomatis.</td></tr>";
+                Swal.fire({ icon: 'success', title: 'Data Disimpan', text: 'Presensi kelas berhasil dikunci.' });
                 pullDatabaseFresh();
             }
         });
     }
 
-    // GURU FITUR: SUBMIT JURNAL
+    // GURU JURNAL & REKAPAN JURNAL MANDIRI (POIN 4)
     document.getElementById("form-submit-jurnal-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -843,43 +877,59 @@
             catatan: document.getElementById("jrn-catatan").value,
             pr: document.getElementById("jrn-pr").value
         };
-        
-        toggleLoading(true, "Mengirim berkas laporan jurnal pengajaran...");
+        toggleLoading(true, "Merekam jurnal mengajar...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Laporan Terkirim', text: 'Jurnal mengajar sukses direkam.' });
+                Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Jurnal tersimpan.' });
                 document.getElementById("form-submit-jurnal-guru").reset();
                 pullDatabaseFresh();
             }
         });
     });
 
-    // SISWA FITUR: PAPAN PENGUMUMAN DIGITAL (AUDIT PROFESIONAL)
-    function tampilkanPapanPengumumanSiswa() {
-        const area = document.getElementById("papan-pengumuman-siswa-area");
-        const info = CACHE_DATA.pengumuman;
-        if(info.length <= 1) {
-            area.innerHTML = "Belum ada pengumuman resmi terbaru saat ini.";
-            return;
-        }
-        area.innerHTML = "";
-        for(let i=1; i<info.length; i++) {
-            area.innerHTML += `<div class="mb-2 border-bottom pb-2">
-                <span class="badge bg-secondary mb-1">${info[i][1]}</span>
-                <h6 class="fw-bold text-dark m-0">${info[i][2]}</h6>
-                <p class="m-0 text-muted m-0">${info[i][3]}</p>
-            </div>`;
+    function tampilkanHistoryJurnalGuru() {
+        const tbody = document.getElementById("tbody-guru-history-jurnal");
+        tbody.innerHTML = "";
+        const rows = CACHE_DATA.jurnal;
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='3'>Belum ada riwayat mengajar.</td></tr>"; return; }
+        for(let i=rows.length-1; i>=1; i--) {
+            tbody.innerHTML += `<tr><td><b>${rows[i][1]}</b><br><span class="badge bg-success">Kelas ${rows[i][2]}</span></td><td>${rows[i][3]}</td><td>${rows[i][4]}</td></tr>`;
         }
     }
 
-    // SISWA FITUR: RENDER RUANG MEDIA BELAJAR MANDIRI BERDASARKAN FILTER KELAS SISWA
+    // GURU MEDIA UPLOAD (POIN 5)
+    document.getElementById("form-upload-media-guru").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const payload = {
+            action: "inputMedia",
+            kelas: document.getElementById("med-kelas").value,
+            mapel: document.getElementById("med-mapel").value,
+            judul: document.getElementById("med-judul").value,
+            linkPdf: document.getElementById("med-pdf").value,
+            linkYt: document.getElementById("med-yt").value,
+            linkKuis: document.getElementById("med-kuis").value
+        };
+        toggleLoading(true, "Mengunggah tautan media belajar digital...");
+        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        .then(res => res.json())
+        .then(res => {
+            toggleLoading(false);
+            if(res.status === "success") {
+                Swal.fire({ icon: 'success', title: 'Sukses Rilis', text: 'Materi belajar berhasil didistribusikan ke siswa!' });
+                document.getElementById("form-upload-media-guru").reset();
+                pullDatabaseFresh();
+            }
+        });
+    });
+
+    // SISWA AREA RENDERING (FIXED BINDING CAPITALS)
     function tampilkanRuangMediaSiswa() {
         let identitasMurid = CACHE_DATA.siswa.find(s => s[0] === USER_SESSION.id);
         if(!identitasMurid) return;
-        let kelasKamu = identitasMurid[2]; // Deteksi kelas si anak
+        let kelasKamu = identitasMurid[2].toString().toUpperCase().trim();
         
         const container = document.getElementById("container-media-siswa");
         container.innerHTML = "";
@@ -887,30 +937,38 @@
         
         const media = CACHE_DATA.media;
         for(let i=1; i<media.length; i++) {
-            let targetKls = media[i][1], mapel = media[i][2], judul = media[i][3], pdf = media[i][4], yt = media[i][5], kuis = media[i][6];
+            let targetKls = media[i][1].toString().toUpperCase().trim();
+            let mapel = media[i][2], judul = media[i][3], pdf = media[i][4], yt = media[i][5], kuis = media[i][6];
             
-            // FILTER CERDAS: Hanya memunculkan materi yang sesuai dengan kelas siswa saat ini!
-            if(targetKls.toString().toUpperCase() === kelasKamu.toString().toUpperCase()) {
+            if(targetKls === kelasKamu) {
                 adaKonten = true;
                 container.innerHTML += `<div class="col-md-6">
                     <div class="card p-4 bg-white shadow-sm">
-                        <span class="badge bg-success-subtle text-success w-auto align-self-start mb-2 px-3 py-1 rounded-pill fw-bold">${mapel}</span>
+                        <span class="badge bg-success-subtle text-success mb-2 align-self-start px-3 py-1 rounded-pill fw-bold">${mapel}</span>
                         <h4 class="fw-bold text-dark mb-3">${judul}</h4>
                         <div class="d-grid gap-2">
                             <a href="${pdf}" target="_blank" class="btn btn-sm btn-outline-dark text-start py-2"><i class="fa fa-file-pdf text-danger"></i> Buka Modul Bacaan (PDF)</a>
                             <a href="${yt}" target="_blank" class="btn btn-sm btn-outline-danger text-start py-2"><i class="fab fa-youtube"></i> Tonton Video Penjelasan</a>
-                            <a href="${kuis}" target="_blank" class="btn btn-sm btn-outline-primary text-start py-2"><i class="fa fa-edit"></i> Kerjakan Latihan Kuis Interaktif</a>
+                            <a href="${kuis}" target="_blank" class="btn btn-sm btn-outline-primary text-start py-2"><i class="fa fa-edit"></i> Kerjakan Latihan Kuis</a>
                         </div>
                     </div>
                 </div>`;
             }
         }
-        if(!adaKonten) container.innerHTML = `<div class='text-muted text-center py-5'>Belum ada materi pelajaran yang diunggah oleh admin untuk jenjang Kelas ${kelasKamu} Anda.</div>`;
+        if(!adaKonten) container.innerHTML = `<div class='text-muted text-center py-5'>Belum ada materi pelajaran untuk jenjang Kelas ${kelasKamu}.</div>`;
     }
 
-    function logoutAplikasi() {
-        window.location.reload();
+    function tampilkanPapanPengumumanSiswa() {
+        const area = document.getElementById("papan-pengumuman-siswa-area");
+        const info = CACHE_DATA.pengumuman;
+        if(info.length <= 1) { area.innerHTML = "Belum ada pengumuman resmi."; return; }
+        area.innerHTML = "";
+        for(let i=1; i<info.length; i++) {
+            area.innerHTML += `<div class="mb-2 border-bottom pb-2"><span class="badge bg-secondary mb-1">${info[i][1]}</span><h6 class="fw-bold text-dark m-0">${info[i][2]}</h6><p class="m-0 text-muted">${info[i][3]}</p></div>`;
+        }
     }
+
+    function logoutAplikasi() { window.location.reload(); }
 </script>
 </body>
 </html>
