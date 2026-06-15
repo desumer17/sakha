@@ -195,7 +195,7 @@
                         <form id="form-add-guru">
                             <div class="mb-2"><label class="small fw-semibold">Nama Lengkap Guru</label><input type="text" class="form-control" id="form-g-nama" required></div>
                             <div class="mb-2"><label class="small fw-semibold text-danger">Nama Panggilan (Kunci Akun)</label><input type="text" class="form-control" id="form-g-panggilan" placeholder="Misal: Dewa" required></div>
-                            <div class="mb-3"><label class="small fw-semibold">Mata Pelajaran diampu (Spesifik/Semua)</label><input type="text" class="form-control" id="form-g-mapel" placeholder="Misal: Matematika SMA / Semua SD" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Mata Pelajaran diampu</label><input type="text" class="form-control" id="form-g-mapel" placeholder="Misal: Matematika SMA" required></div>
                             <button type="submit" class="btn btn-theme w-100 py-2">Daftarkan Akun Guru</button>
                         </form>
                     </div>
@@ -249,12 +249,11 @@
                 <div class="row g-2 mb-4 align-items-end">
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Bulan Rekap</label><select id="rkp-bulan" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Spesifik</label><select id="rkp-kelas" class="form-select"><option value="Semua">-- Pilih Satu Kelas --</option></select></div>
-                    <div class="col-md-4"><button class="btn btn-theme w-100 py-2" onclick="prosesHitungMatriksAbsen()"><i class="fa fa-sync"></i> Susun Matriks</button></div>
+                    <div class="col-md-4"><button class="btn btn-theme w-100 py-2" onclick="prosesHitungMatriksAbsen('Admin')"><i class="fa fa-sync"></i> Susun Matriks</button></div>
                 </div>
-                
-                <div id="print-area-matriks" class="p-2">
-                    <div id="core-matriks-table-inside" class="table-responsive">
-                        <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas untuk menyusun laporan matriks.</p>
+                <div id="print-area-matriks-Admin" class="p-2">
+                    <div id="core-matriks-table-inside-Admin" class="table-responsive">
+                        <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas.</p>
                     </div>
                 </div>
             </div>
@@ -274,7 +273,7 @@
     <div id="panel-guru" class="d-none">
         <ul class="nav nav-pills mb-4 justify-content-center shadow-sm p-2 bg-white rounded-3" id="guruTabs">
             <li class="nav-item"><button class="nav-link active" onclick="bukaTabGuru('absen')"><i class="fa fa-check-square me-1"></i> Isian Absen Siswa</button></li>
-            <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('jurnal')"><i class="fa fa-book me-1"></i> Jurnal Mengajar</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('g-rekap')"><i class="fa fa-calendar-check me-1"></i> Rekap Absen</button></li> <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('jurnal')"><i class="fa fa-book me-1"></i> Jurnal Mengajar</button></li>
             <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('media')"><i class="fa fa-cloud-upload-alt me-1"></i> Media Belajar</button></li>
         </ul>
 
@@ -286,10 +285,26 @@
                     <div class="col-md-4"><label class="small fw-semibold">Bulan Administrasi</label><select id="absen-input-bulan-target" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
                     <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Mengajar</label><select id="absen-input-kelas" class="form-select" onchange="sinkronisasiLogDataAbsenLamaGuru()"><option value="">-- Pilih Kelas --</option></select></div>
                 </div>
-                <div class="alert alert-warning py-2 small"><i class="fa fa-history"></i> <b>Sistem Sinkron otomatis:</b> Jika pada tanggal & kelas yang sama sudah pernah diisi, sistem otomatis memanggil kembali data tersebut untuk diedit kembali.</div>
+                <div class="alert alert-warning py-2 small"><i class="fa fa-history"></i> <b>Sistem Sinkron otomatis:</b> Jika data tanggal ini diubah lalu disimpan kembali, sistem otomatis menimpa file lama.</div>
                 <hr>
-                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan tanggal dan kelas di atas untuk menarik records.</td></tr></tbody></table></div>
+                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan tanggal dan kelas di atas.</td></tr></tbody></table></div>
                 <button class="btn btn-theme w-100 py-3 rounded-3 shadow fw-bold" onclick="kunciKirimAbsenGuruMassal()"><i class="fa fa-lock"></i> Kunci & Kirim Data Absensi</button>
+            </div>
+        </div>
+
+        <div id="tab-gru-g-rekap" class="sub-panel-guru d-none">
+            <div class="card p-4">
+                <h5 class="fw-bold text-success mb-3">Buku Rekap Presensi (Akses Guru)</h5>
+                <div class="row g-2 mb-4 align-items-end">
+                    <div class="col-md-4"><label class="small fw-semibold">Pilih Bulan Rekap</label><select id="rkp-g-bulan" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+                    <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Spesifik</label><select id="rkp-g-kelas" class="form-select"><option value="Semua">-- Pilih Satu Kelas --</option></select></div>
+                    <div class="col-md-4"><button class="btn btn-theme w-100 py-2" onclick="prosesHitungMatriksAbsen('Guru')"><i class="fa fa-sync"></i> Susun Matriks</button></div>
+                </div>
+                <div id="print-area-matriks-Guru" class="p-2">
+                    <div id="core-matriks-table-inside-Guru" class="table-responsive">
+                        <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -354,14 +369,12 @@
             <h5 class="fw-bold text-success mb-1"><i class="fa fa-bullhorn"></i> PAPAN PENGUMUMAN RESMI SAKHA</h5>
             <div id="papan-pengumuman-siswa-area" class="text-muted small">Memuat info terbaru...</div>
         </div>
-        
         <div class="card p-4 text-center text-white theme-bg mb-4 shadow">
             <h3 class="fw-bold m-0">RUANG MEDIA BELAJAR MANDIRI DIGITAL</h3>
             <p class="m-0 small text-white-50">Pelajari kembali modul, tonton video, atau latih kemampuan kuis interaktif Anda di rumah</p>
         </div>
         <div class="row g-3" id="container-media-siswa"></div>
     </div>
-
 </div>
 
 <div class="modal fade" id="modalKuitansi" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
@@ -454,7 +467,7 @@
             }
         }).catch(() => {
             toggleLoading(false);
-            Swal.fire({ icon: 'error', title: 'Error Jaringan!', text: 'Terjadi masalah koneksi ke server.' });
+            Swal.fire({ icon: 'error', title: 'Error Jaringan!', text: 'Terjadi masalah koneksi.' });
         });
     });
 
@@ -520,7 +533,7 @@
             if(rows[i][2]) setKelas.add(rows[i][2].toString().toUpperCase().trim());
         }
         
-        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "absen-input-kelas", "jrn-kelas", "med-kelas", "filter-jurnal-admin", "filter-jurnal-guru", "filter-media-guru"];
+        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "rkp-g-kelas", "absen-input-kelas", "jrn-kelas", "med-kelas", "filter-jurnal-admin", "filter-jurnal-guru", "filter-media-guru"];
         listDropdownId.forEach(id => {
             const el = document.getElementById(id);
             if(!el) return;
@@ -555,7 +568,7 @@
         const payload = {
             action: "inputSiswa",
             nama: document.getElementById("form-s-nama").value,
-            panggilan: document.getElementById("form-s-panggilan").value, // Input manual (Poin 1)
+            panggilan: document.getElementById("form-s-panggilan").value,
             kelas: document.getElementById("form-s-kelas").value,
             sekolah: document.getElementById("form-s-sekolah").value,
             hpOrtu: document.getElementById("form-s-hportu").value,
@@ -597,7 +610,7 @@
         }
     }
 
-    // REGISTRASI GURU (POIN 2)
+    // REGISTRASI GURU
     document.getElementById("form-add-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -606,7 +619,7 @@
             panggilan: document.getElementById("form-g-panggilan").value,
             mapel: document.getElementById("form-g-mapel").value
         };
-        toggleLoading(true, "Mendaftarkan pengajar ke database mandiri...");
+        toggleLoading(true, "Mendaftarkan pengajar...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
@@ -622,7 +635,7 @@
     function tampilkanTabelGuruAdmin() {
         const tbody = document.getElementById("tbody-tabel-guru");
         tbody.innerHTML = "";
-        const rows = CACHE_DATA.guru; // Membaca dari tab Guru khusus (Poin 2)
+        const rows = CACHE_DATA.guru;
         if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>Nihil data guru</td></tr>"; return; }
         for(let i=1; i<rows.length; i++) {
             tbody.innerHTML += `<tr>
@@ -691,7 +704,7 @@
                 
                 let infoAnak = CACHE_DATA.siswa.find(s => s[0] === idS);
                 let hpO = infoAnak ? infoAnak[4] : "";
-                let msgText = window.encodeURIComponent("Terima kasih. Pembayaran SPP Bimbel SAKHA untuk adik *" + document.getElementById("kasir-display-nama").value + "* bulan *" + payload.bulan + "* sebesar *Rp " + Number(payload.jumlah).toLocaleString('id-ID') + "* TELAH BERHASIL DITERIMA.\nNo Invoice: " + res.idBayar);
+                let msgText = window.encodeURIComponent("Terima kasih. Pembayaran SPP Bimbel SAKHA untuk adik *" + document.getElementById("kasir-display-nama").value + "* bulan *" + payload.bulan + "* sebesar *Rp " + Number(payload.jumlah).toLocaleString('id-ID') + "* TELAH BERHASIL DITERIMA.");
                 document.getElementById("btn-wa-kuitansi").onclick = function() {
                     window.open("https://wa.me/" + normalisasiNomorWA(hpO) + "?text=" + msgText, "_blank");
                 };
@@ -735,7 +748,7 @@
             let isLunas = mapLunas[id] ? true : false;
             let badge = isLunas ? `<span class="badge bg-success-subtle text-success fw-bold">✅ Lunas</span>` : `<span class="badge bg-danger-subtle text-danger fw-bold">❌ Belum Bayar</span>`;
             
-            let waMsg = window.encodeURIComponent("Halo Ayah/Bunda dari *" + nama + "*, kami dari Admin Bimbel SAKHA menginfokan bahwa iuran SPP untuk bulan *" + bln + "* belum terdata. Mohon konfirmasinya. Terima kasih.");
+            let waMsg = window.encodeURIComponent("Halo Ayah/Bunda dari *" + nama + "*, kami dari Admin Bimbel SAKHA menginfokan bahwa iuran SPP untuk bulan *" + bln + "* belum terdata. Mohon konfirmasinya.");
             let waUrl = "https://wa.me/" + normalisasiNomorWA(hpO) + "?text=" + waMsg;
             let btnAction = isLunas ? `<button class="btn btn-sm btn-light border" disabled>Aman</button>` : `<a href="${waUrl}" target="_blank" class="btn btn-sm btn-outline-danger rounded-pill fw-bold">Hubungi</a>`;
             
@@ -743,22 +756,29 @@
         }
     }
 
-    // INTERPRETASI MATRIKS DATA TERKOMPRESI JANGKA PANJANG (POIN 3)
-    function prosesHitungMatriksAbsen() {
-        const bln = document.getElementById("rkp-bulan").value;
-        const kls = document.getElementById("rkp-kelas").value;
-        const inside = document.getElementById("core-matriks-table-inside");
+    // INTERPRETASI MATRIKS + HITUNG OTOMATIS VERTIKAL TOTAL HADIR (POIN 2 & 3)
+    function prosesHitungMatriksAbsen(roleTarget) {
+        let bln, kls, insideId;
+        if(roleTarget === 'Admin') {
+            bln = document.getElementById("rkp-bulan").value;
+            kls = document.getElementById("rkp-kelas").value;
+            insideId = "core-matriks-table-inside-Admin";
+        } else {
+            bln = document.getElementById("rkp-g-bulan").value;
+            kls = document.getElementById("rkp-g-kelas").value;
+            insideId = "core-matriks-table-inside-Guru";
+        }
         
-        if(kls === "Semua") {
+        const inside = document.getElementById(insideId);
+        if(kls === "Semua" || kls === "") {
             inside.innerHTML = "<div class='alert alert-danger text-center'>Pilih kelas spesifik untuk menarik matriks.</div>";
             return;
         }
         
         const logAbsen = CACHE_DATA.absen;
         let listTanggalTerdata = [];
-        let petaKehadiranSiswa = {}; // Struktur: { NamaSiswa: { "16/6/2026": "H" } }
+        let petaKehadiranSiswa = {};
         
-        // Scan baris data terkompresi
         for(let i=1; i<logAbsen.length; i++) {
             let tglRow = logAbsen[i][1];
             let blnRow = logAbsen[i][2];
@@ -774,7 +794,7 @@
                         if(!petaKehadiranSiswa[namaSiswa]) petaKehadiranSiswa[namaSiswa] = {};
                         petaKehadiranSiswa[namaSiswa][tglRow] = objData[namaSiswa];
                     }
-                } catch(e) { console.log("Gagal urai log JSON baris: " + i); }
+                } catch(e) {}
             }
         }
         
@@ -784,13 +804,14 @@
             return;
         }
         
-        // Buat Blok Konten Mandiri Terisolasi Khusus untuk di-Iframe Cetak (Poin 6)
+        // Buat Array untuk hitung jumlah hadir (H) per tanggal (Poin 2)
+        let totalHadirPerKolomTanggal = Array(listTanggalTerdata.length).fill(0);
+        
         let htmlBlokCetak = `<div class="text-center" style="font-family:'Plus Jakarta Sans',sans-serif; color:#000; padding:10px;">
-            <h2 style="font-weight:800; margin:0; font-size:1.6rem;">BIMBEL SAKHA EDUCATION HUB</h2>
-            <p style="margin:3px 0; font-size:0.9rem; font-weight:600; letter-spacing:0.5px;">LAPORAN BULANAN KEHADIRAN AKTIVITAS BELAJAR SISWA</p>
-            <h5 style="font-weight:bold; margin-top:6px; font-size:1rem; border-top:1px solid #000; border-bottom:1px solid #000; padding:4px 0;">Kelas: ${kls} | Bulan Administrasi: ${bln}</h5>
-            <p style="font-size:0.8rem; text-align:right; margin:5px 0 15px 0;">Tanggal Cetak Dokumen: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID')}</p>
-            <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; text-align:center; font-size:0.85rem;">
+            <h2 style="font-weight:800; margin:0; font-size:1.4rem;">BIMBEL SAKHA EDUCATION HUB</h2>
+            <p style="margin:3px 0; font-size:0.85rem; font-weight:600;">LAPORAN REKAPITULASI PRESENSI MATRIKS</p>
+            <h5 style="font-weight:bold; margin-top:6px; font-size:0.95rem; border-top:1px solid #000; border-bottom:1px solid #000; padding:4px 0;">Kelas: ${kls} | Bulan: ${bln}</h5>
+            <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; text-align:center; font-size:0.8rem; margin-top:10px;">
                 <thead style="background-color:#f2f2f2;"><tr><th style="text-align:left;">Nama Murid</th>`;
         
         listTanggalTerdata.forEach(t => { 
@@ -799,30 +820,40 @@
         });
         htmlBlokCetak += `<th>Total H</th><th>%</th></tr></thead><tbody>`;
         
-        // Isi Baris Tabel Matriks
         for(let nama in petaKehadiranSiswa) {
             htmlBlokCetak += `<tr><td style="text-align:left; font-weight:bold;">${nama}</td>`;
-            let totalHadir = 0;
-            listTanggalTerdata.forEach(t => {
+            let totalHadirSiswa = 0;
+            
+            listTanggalTerdata.forEach((t, indexKolom) => {
                 let status = petaKehadiranSiswa[nama][t] || "-";
-                if(status === "H") totalHadir++;
+                if(status === "H") {
+                    totalHadirSiswa++;
+                    totalHadirPerKolomTanggal[indexKolom]++; // Tambah counter vertikal (Poin 2)
+                }
                 htmlBlokCetak += `<td>${status}</td>`;
             });
-            let persen = Math.round((totalHadir / listTanggalTerdata.length) * 100);
-            htmlBlokCetak += `<td style="font-weight:bold; color:green;">${totalHadir}/${listTanggalTerdata.length}</td><td style="font-weight:bold;">${persen}%</td></tr>`;
+            let persen = Math.round((totalHadirSiswa / listTanggalTerdata.length) * 100);
+            htmlBlokCetak += `<td style="font-weight:bold; color:green;">${totalHadirSiswa}/${listTanggalTerdata.length}</td><td style="font-weight:bold;">${persen}%</td></tr>`;
         }
+        
+        // TAMBAHKAN BARIS TOTAL HADIR DI PALING BAWAH (POIN 2)
+        htmlBlokCetak += `<tr style="background-color: #e8f8f5; font-weight: 800; border-top: 2px solid #000;">
+            <td style="text-align: left; color:#11998e;"><i class="fa fa-users"></i> TOTAL HADIR (H)</td>`;
+        totalHadirPerKolomTanggal.forEach(jmlHadir => {
+            htmlBlokCetak += `<td style="color:#11998e; font-size:0.9rem;">${jmlHadir}</td>`;
+        });
+        htmlBlokCetak += `<td colspan="2" style="background-color:#d1f2eb; text-align:center; font-size:0.75rem; color:#11998e;">Siswa Aktif</td></tr>`;
+        
         htmlBlokCetak += `</tbody></table></div>`;
         
-        // Render Preview di Screen Aplikasi
         inside.innerHTML = `<div class="d-flex justify-content-end mb-3 no-print">
-            <button class="btn btn-dark px-4 font-semibold" onclick="cetakLaporanMatriksIframeTerisolasi()"><i class="fa fa-print"></i> Cetak Laporan Presensi Resmi</button>
+            <button class="btn btn-dark px-4 font-semibold" onclick="cetakLaporanMatriksIframeTerisolasi('${roleTarget}')"><i class="fa fa-print"></i> Cetak Laporan Resmi</button>
         </div>
-        <div id="wrapper-pure-konten-matriks">${htmlBlokCetak}</div>`;
+        <div id="wrapper-pure-konten-matriks-${roleTarget}">${htmlBlokCetak}</div>`;
     }
 
-    // FIX CETAK MATRIKS TERISOLASI (ANTI-BOCOR POIN 6)
-    function cetakLaporanMatriksIframeTerisolasi() {
-        const kontenM = document.getElementById("wrapper-pure-konten-matriks").innerHTML;
+    function cetakLaporanMatriksIframeTerisolasi(roleTarget) {
+        const kontenM = document.getElementById("wrapper-pure-konten-matriks-" + roleTarget).innerHTML;
         const iframeM = document.createElement('iframe');
         iframeM.style.position = 'absolute'; iframeM.style.width = '0px'; iframeM.style.height = '0px'; iframeM.style.border = 'none';
         document.body.appendChild(iframeM);
@@ -830,6 +861,7 @@
         const docM = iframeM.contentWindow.document;
         docM.open();
         docM.write(`<html><head><title>Laporan Presensi SAKHA</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>body{font-family:sans-serif; background:white; color:black; padding:10px;}</style>
         </head><body onload="window.print();window.close();">${kontenM}</body></html>`);
         docM.close();
@@ -851,20 +883,18 @@
         }
     }
 
-    // SINKRONISASI OTOMATIS DATA ABSEN LAMA (EDIT DAN TIMPA - POIN 3)
+    // SINKRONISASI OTOMATIS DATA ABSEN LAMA
     function sinkronisasiLogDataAbsenLamaGuru() {
         const rawTgl = document.getElementById("absen-input-tgl").value;
         const kls = document.getElementById("absen-input-kelas").value;
         const tbody = document.getElementById("tbody-guru-absen");
         
         if(!rawTgl || !kls) {
-            tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>Tentukan tanggal dan kelas di atas untuk menarik records.</td></tr>";
+            tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>Tentukan tanggal dan kelas di atas.</td></tr>";
             return;
         }
         
         let tglFormat = new Date(rawTgl).toLocaleDateString('id-ID');
-        
-        // Cari apakah ada log terkompresi untuk tanggal & kelas ini
         let petaStatusLama = null;
         const logAbsen = CACHE_DATA.absen;
         for(let i=1; i<logAbsen.length; i++) {
@@ -886,7 +916,6 @@
                 adaSiswa = true;
                 idx++;
                 
-                // Tentukan status default: jika ada data lama pakai data lama, jika tidak default "H"
                 let statusDefault = "H";
                 if(petaStatusLama && petaStatusLama[nama]) { statusDefault = petaStatusLama[nama]; }
                 
@@ -920,26 +949,26 @@
         document.querySelectorAll("#tbody-guru-absen input[type='radio']:checked").forEach(rad => {
             records.push({ nama: rad.getAttribute("data-nama"), status: rad.value });
         });
-        if(records.length === 0) return Swal.fire({ icon: 'error', title: 'Gagal', text: 'Tidak ada data siswa untuk dikirim.' });
+        if(records.length === 0) return Swal.fire({ icon: 'error', title: 'Gagal', text: 'Tidak ada data siswa.' });
         
         const payload = {
             action: "submitAbsen", tanggal: new Date(tgl).toLocaleDateString('id-ID'),
             bulanTarget: bTar, kelas: kls, guru: USER_SESSION.nama, records: records
         };
         
-        toggleLoading(true, "Mengunci & menyimpan data presensi terkompresi...");
+        toggleLoading(true, "Mengunci & memperbarui data presensi...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Data Berhasil Disimpan', text: 'Presensi aman dan diperbarui di awan.', timer: 2000, showConfirmButton: false });
+                Swal.fire({ icon: 'success', title: 'Berhasil Diperbarui', text: 'Data lama berhasil ditimpa dengan data presensi baru.', timer: 1800, showConfirmButton: false });
                 pullDatabaseFresh();
             }
-        }).catch(() => { toggleLoading(false); Swal.fire({ icon: 'error', title: 'Fatal Error', text: 'Koneksi terputus.' }); });
+        }).catch(() => { toggleLoading(false); Swal.fire({ icon: 'error', title: 'Fatal Error', text: 'Koneksi gagal.' }); });
     }
 
-    // JURNAL MENGAJAR SISI GURU (POIN 4)
+    // JURNAL MENGAJAR SISI GURU
     document.getElementById("form-submit-jurnal-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -974,7 +1003,6 @@
             let tgl = rows[i][1], kelas = rows[i][2], mat = rows[i][3], cat = rows[i][4], pr = rows[i][5];
             if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
             
-            // Tampilan lengkap memuat Kolom PR (Poin 4)
             tbody.innerHTML += `<tr>
                 <td><b>${tgl}</b><br><span class="badge bg-success">Kelas ${kelas}</span></td>
                 <td>${mat}</td>
@@ -984,7 +1012,7 @@
         }
     }
 
-    // REKAP MEDIA BELAJAR SISI GURU (POIN 5)
+    // REKAP MEDIA BELAJAR SISI GURU
     document.getElementById("form-upload-media-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
