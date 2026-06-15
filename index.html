@@ -88,7 +88,6 @@
             font-size: 0.85rem;
         }
 
-        /* Desain Khusus Lembar Cetak Matriks & Dokumen Resmi */
         .header-cetak-formal {
             display: none;
             border-bottom: 3px double #000;
@@ -166,6 +165,7 @@
                         <h5 class="fw-bold text-success mb-3">Registrasi Murid Baru</h5>
                         <form id="form-add-siswa">
                             <div class="mb-2"><label class="small fw-semibold">Nama Lengkap Murid</label><input type="text" class="form-control" id="form-s-nama" required></div>
+                            <div class="mb-2"><label class="small fw-semibold text-danger">Nama Panggilan (Kunci Akun)</label><input type="text" class="form-control" id="form-s-panggilan" placeholder="Misal: Budi" required></div>
                             <div class="mb-2"><label class="small fw-semibold">Kelas Tingkat (Bebas)</label><input type="text" class="form-control" id="form-s-kelas" placeholder="Misal: 5A" required></div>
                             <div class="mb-2"><label class="small fw-semibold">Asal Sekolah</label><input type="text" class="form-control" id="form-s-sekolah" required></div>
                             <div class="mb-2"><label class="small fw-semibold">No. WA Orang Tua</label><input type="text" class="form-control" id="form-s-hportu" placeholder="08..." required></div>
@@ -194,6 +194,7 @@
                         <h5 class="fw-bold text-success mb-3">Registrasi Guru Baru</h5>
                         <form id="form-add-guru">
                             <div class="mb-2"><label class="small fw-semibold">Nama Lengkap Guru</label><input type="text" class="form-control" id="form-g-nama" required></div>
+                            <div class="mb-2"><label class="small fw-semibold text-danger">Nama Panggilan (Kunci Akun)</label><input type="text" class="form-control" id="form-g-panggilan" placeholder="Misal: Dewa" required></div>
                             <div class="mb-3"><label class="small fw-semibold">Mata Pelajaran diampu (Spesifik/Semua)</label><input type="text" class="form-control" id="form-g-mapel" placeholder="Misal: Matematika SMA / Semua SD" required></div>
                             <button type="submit" class="btn btn-theme w-100 py-2">Daftarkan Akun Guru</button>
                         </form>
@@ -202,7 +203,7 @@
                 <div class="col-md-8">
                     <div class="card p-4">
                         <h5 class="fw-bold mb-3">Daftar Tenaga Pengajar SAKHA</h5>
-                        <div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-light"><tr><th>ID Guru</th><th>Nama Lengkap & Spesialisasi Pengajaran</th><th>Username Login</th></tr></thead><tbody id="tbody-tabel-guru"></tbody></table></div>
+                        <div class="table-responsive"><table class="table table-hover align-middle"><thead class="table-light"><tr><th>ID Guru</th><th>Nama Lengkap</th><th>Mata Pelajaran</th><th>Username</th></tr></thead><tbody id="tbody-tabel-guru"></tbody></table></div>
                     </div>
                 </div>
             </div>
@@ -252,12 +253,6 @@
                 </div>
                 
                 <div id="print-area-matriks" class="p-2">
-                    <div class="header-cetak-formal text-center">
-                        <h2 style="font-weight: 800; margin:0;">BIMBEL SAKHA EDUCATION HUB</h2>
-                        <p style="margin:2px 0; font-size:0.9rem;">LAPORAN BULANAN KEHADIRAN AKTIVITAS BELAJAR SISWA</p>
-                        <h5 style="font-weight: bold; margin-top:5px;" id="lbl-formal-meta">Kelas: - | Bulan Administrasi: -</h5>
-                        <p class="text-end small style-mini-date" style="font-size:0.8rem; margin:0;" id="lbl-formal-tglcetak">Tanggal Cetak: -</p>
-                    </div>
                     <div id="core-matriks-table-inside" class="table-responsive">
                         <p class="text-muted text-center py-4">Tentukan parameter bulan & kelas di atas untuk menyusun laporan matriks.</p>
                     </div>
@@ -267,7 +262,10 @@
 
         <div id="tab-adm-jurnal" class="sub-panel-admin d-none">
             <div class="card p-4">
-                <h5 class="fw-bold text-dark mb-3"><i class="fa fa-eye"></i> Monitoring Jurnal Mengajar Seluruh Guru</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold m-0"><i class="fa fa-eye"></i> Monitoring Jurnal Mengajar Seluruh Guru</h5>
+                    <select id="filter-jurnal-admin" class="form-select w-auto" onchange="tampilkanTabelPantauJurnalAdmin()"><option value="Semua">Semua Kelas</option></select>
+                </div>
                 <div class="table-responsive"><table class="table table-bordered table-striped align-middle small"><thead class="table-dark"><tr><th>Tanggal</th><th>Kelas</th><th>Materi Pembahasan</th><th>Catatan Kelas & Kasus</th><th>Tugas Rumah (PR)</th></tr></thead><tbody id="tbody-admin-pantau-jurnal"></tbody></table></div>
             </div>
         </div>
@@ -277,20 +275,20 @@
         <ul class="nav nav-pills mb-4 justify-content-center shadow-sm p-2 bg-white rounded-3" id="guruTabs">
             <li class="nav-item"><button class="nav-link active" onclick="bukaTabGuru('absen')"><i class="fa fa-check-square me-1"></i> Isian Absen Siswa</button></li>
             <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('jurnal')"><i class="fa fa-book me-1"></i> Jurnal Mengajar</button></li>
-            <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('media')"><i class="fa fa-cloud-upload-alt me-1"></i> Upload Media Belajar</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('media')"><i class="fa fa-cloud-upload-alt me-1"></i> Media Belajar</button></li>
         </ul>
 
         <div id="tab-gru-absen" class="sub-panel-guru">
             <div class="card p-4">
                 <h5 class="fw-bold text-success mb-3">Input Kehadiran Kelas Harian</h5>
                 <div class="row g-2 mb-4">
-                    <div class="col-md-4"><label class="small fw-semibold">Tanggal Kegiatan Les</label><input type="date" class="form-control" id="absen-input-tgl" required></div>
-                    <div class="col-md-4"><label class="small fw-semibold">Bulan Administrasi (Siasat Hari Pengganti)</label><select id="absen-input-bulan-target" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
-                    <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Mengajar</label><select id="absen-input-kelas" class="form-select" onchange="tarikSiswaUntukAbsenGuru(this.value)"><option value="">-- Pilih Kelas --</option></select></div>
+                    <div class="col-md-4"><label class="small fw-semibold">Tanggal Kegiatan Les</label><input type="date" class="form-control" id="absen-input-tgl" onchange="sinkronisasiLogDataAbsenLamaGuru()"></div>
+                    <div class="col-md-4"><label class="small fw-semibold">Bulan Administrasi</label><select id="absen-input-bulan-target" class="form-select"><option>Januari</option><option>Februari</option><option>Maret</option><option>April</option><option>Mei</option><option>Juni</option><option>Juli</option><option>Agustus</option><option>September</option><option>Oktober</option><option>November</option><option>Desember</option></select></div>
+                    <div class="col-md-4"><label class="small fw-semibold">Pilih Kelas Mengajar</label><select id="absen-input-kelas" class="form-select" onchange="sinkronisasiLogDataAbsenLamaGuru()"><option value="">-- Pilih Kelas --</option></select></div>
                 </div>
-                <div class="alert alert-info py-2 small"><i class="fa fa-info-circle"></i> <b>Catatan Sistem:</b> Jika menginput pada tanggal & kelas yang sama dengan data lama, aplikasi akan otomatis memperbarui (overwrite) data lama agar tidak terjadi penumpukan.</div>
+                <div class="alert alert-warning py-2 small"><i class="fa fa-history"></i> <b>Sistem Sinkron otomatis:</b> Jika pada tanggal & kelas yang sama sudah pernah diisi, sistem otomatis memanggil kembali data tersebut untuk diedit kembali.</div>
                 <hr>
-                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan kelas di atas untuk memunculkan daftar siswa.</td></tr></tbody></table></div>
+                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan tanggal dan kelas di atas untuk menarik records.</td></tr></tbody></table></div>
                 <button class="btn btn-theme w-100 py-3 rounded-3 shadow fw-bold" onclick="kunciKirimAbsenGuruMassal()"><i class="fa fa-lock"></i> Kunci & Kirim Data Absensi</button>
             </div>
         </div>
@@ -303,41 +301,57 @@
                         <form id="form-submit-jurnal-guru">
                             <div class="mb-3"><label class="small fw-semibold">Tanggal Mengajar</label><input type="date" class="form-control" id="jrn-tgl" required></div>
                             <div class="mb-3"><label class="small fw-semibold">Kelas Les Terkait</label><select id="jrn-kelas" class="form-select" required></select></div>
-                            <div class="mb-3"><label class="small fw-semibold">Materi / Topik Pembahasan Bab</label><input type="text" class="form-control" id="jrn-materi" placeholder="Misal: Operasi Aljabar Pecahan" required></div>
-                            <div class="mb-3"><label class="small fw-semibold">Catatan Kasus / Perkembangan Kelas</label><textarea class="form-control" id="jrn-catatan" rows="3" placeholder="Tulis kendala pemahaman atau kejadian penting..." required></textarea></div>
-                            <div class="mb-3"><label class="small fw-semibold">Pekerjaan Rumah (PR) Siswa</label><input type="text" class="form-control" id="jrn-pr" placeholder="Tulis 'Tidak ada' jika nihil" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Materi / Topik Pembahasan Bab</label><input type="text" class="form-control" id="jrn-materi" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Catatan Kasus / Perkembangan Kelas</label><textarea class="form-control" id="jrn-catatan" rows="3" required></textarea></div>
+                            <div class="mb-3"><label class="small fw-semibold">Pekerjaan Rumah (PR) Siswa</label><input type="text" class="form-control" id="jrn-pr" required></div>
                             <button type="submit" class="btn btn-theme w-100 py-2">Kirim Jurnal Mengajar</button>
                         </form>
                     </div>
                 </div>
                 <div class="col-md-7">
                     <div class="card p-4">
-                        <h5 class="fw-bold text-dark mb-3"><i class="fa fa-history"></i> Rekam Riwayat Mengajar Bimbel</h5>
-                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Tanggal/Kelas</th><th>Materi Bahasan</th><th>Catatan Kasus Kelas</th></tr></thead><tbody id="tbody-guru-history-jurnal"></tbody></table></div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0"><i class="fa fa-history"></i> Rekam Riwayat Jurnal</h5>
+                            <select id="filter-jurnal-guru" class="form-select w-auto" onchange="tampilkanHistoryJurnalGuru()"><option value="Semua">Semua Kelas</option></select>
+                        </div>
+                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Tanggal/Kelas</th><th>Materi Bahasan</th><th>Catatan Kasus</th><th>PR</th></tr></thead><tbody id="tbody-guru-history-jurnal"></tbody></table></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="tab-gru-media" class="sub-panel-guru d-none">
-            <div class="card p-4" style="max-width: 600px; margin: 0 auto;">
-                <h5 class="fw-bold text-success mb-3"><i class="fa fa-cloud-upload-alt"></i> Upload & Distribusi Media Belajar Digital</h5>
-                <form id="form-upload-media-guru">
-                    <div class="mb-2"><label class="small fw-semibold">Target Kelas Jenjang</label><select id="med-kelas" class="form-select" required></select></div>
-                    <div class="mb-2"><label class="small fw-semibold">Mata Pelajaran</label><input type="text" class="form-control" id="med-mapel" placeholder="Misal: Matematika" required></div>
-                    <div class="mb-2"><label class="small fw-semibold">Judul Materi Pembahasan</label><input type="text" class="form-control" id="med-judul" placeholder="Misal: Rumus Pythagoras Kls 8" required></div>
-                    <div class="mb-2"><label class="small fw-semibold">Link Google Drive Modul PDF</label><input type="url" class="form-control" id="med-pdf" placeholder="https://drive.google.com/..." required></div>
-                    <div class="mb-2"><label class="small fw-semibold">Link YouTube Penjelasan Video</label><input type="url" class="form-control" id="med-yt" placeholder="https://youtube.com/..." required></div>
-                    <div class="mb-3"><label class="small fw-semibold">Link Latihan Kuis Online (Google Form/Quizizz)</label><input type="url" class="form-control" id="med-kuis" placeholder="https://quizizz.com/..." required></div>
-                    <button type="submit" class="btn btn-theme w-100 py-2">Upload & Bagikan ke Murid</button>
-                </form>
+            <div class="row">
+                <div class="col-md-5 mb-4">
+                    <div class="card p-4">
+                        <h5 class="fw-bold text-success mb-3"><i class="fa fa-cloud-upload-alt"></i> Upload Media</h5>
+                        <form id="form-upload-media-guru">
+                            <div class="mb-2"><label class="small fw-semibold">Target Kelas Jenjang</label><select id="med-kelas" class="form-select" required></select></div>
+                            <div class="mb-2"><label class="small fw-semibold">Mata Pelajaran</label><input type="text" class="form-control" id="med-mapel" required></div>
+                            <div class="mb-2"><label class="small fw-semibold">Judul Materi Pembahasan</label><input type="text" class="form-control" id="med-judul" required></div>
+                            <div class="mb-2"><label class="small fw-semibold">Link Google Drive Modul PDF</label><input type="url" class="form-control" id="med-pdf" required></div>
+                            <div class="mb-2"><label class="small fw-semibold">Link YouTube Penjelasan Video</label><input type="url" class="form-control" id="med-yt" required></div>
+                            <div class="mb-3"><label class="small fw-semibold">Link Latihan Kuis Online</label><input type="url" class="form-control" id="med-kuis" required></div>
+                            <button type="submit" class="btn btn-theme w-100 py-2">Upload & Bagikan ke Murid</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold m-0"><i class="fa fa-folder-open"></i> Log Tautan Media Rilis</h5>
+                            <select id="filter-media-guru" class="form-select w-auto" onchange="tampilkanHistoryMediaGuru()"><option value="Semua">Semua Kelas</option></select>
+                        </div>
+                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Kelas/Mapel</th><th>Judul Pembahasan</th><th>File Tautan</th></tr></thead><tbody id="tbody-guru-history-media"></tbody></table></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="panel-siswa" class="d-none">
         <div class="alert bg-white p-4 border border-success-subtle rounded-3 mb-4 shadow-sm text-start">
-            <h5 class="fw-bold text-success mb-1"><i class="fa fa-bullhorn animate-bounce"></i> PAPAN PENGUMUMAN RESMI SAKHA</h5>
+            <h5 class="fw-bold text-success mb-1"><i class="fa fa-bullhorn"></i> PAPAN PENGUMUMAN RESMI SAKHA</h5>
             <div id="papan-pengumuman-siswa-area" class="text-muted small">Memuat info terbaru...</div>
         </div>
         
@@ -394,18 +408,15 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    // MASUKKAN URL GENERATE APPS SCRIPT ANDA DI SINI
+    // URL WEB APP APPS SCRIPT ANDA
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzeNdThITssgEz_sIn1C93NX75R4z0TW6PF_Nz3_I_scu0Hkz6okXpWJ1JFmcgEv2bw/exec";
     
-    let CACHE_DATA = { siswa: [], keuangan: [], absen: [], media: [], pengumuman: [], jurnal: [], akun: [] };
+    let CACHE_DATA = { siswa: [], keuangan: [], absen: [], media: [], pengumuman: [], jurnal: [], akun: [], guru: [] };
     let USER_SESSION = { role: "", nama: "", id: "" };
 
-    // Validasi & Perbaikan Awalan Kode Negara WA (Poin 7)
     function normalisasiNomorWA(phone) {
         let clean = phone.toString().replace(/[^0-9]/g, '');
-        if (clean.startsWith('0')) {
-            clean = '62' + clean.slice(1);
-        }
+        if (clean.startsWith('0')) { clean = '62' + clean.slice(1); }
         return clean;
     }
 
@@ -416,7 +427,7 @@
         else overlay.classList.add("d-none");
     }
 
-    // AUTH LOGIN PROCESS
+    // LOGIN PROCESS
     document.getElementById("form-login-proses").addEventListener("submit", function(e) {
         e.preventDefault();
         const user = document.getElementById("input-username").value;
@@ -433,12 +444,10 @@
             if(res.status === "success") {
                 USER_SESSION = res;
                 Swal.fire({ icon: 'success', title: 'Login Berhasil!', text: 'Selamat Datang ' + res.nama, timer: 1500, showConfirmButton: false });
-                
                 document.getElementById("screen-login").classList.add("d-none");
                 document.getElementById("app-nav").classList.remove("d-none");
                 document.getElementById("screen-dashboard").classList.remove("d-none");
                 document.getElementById("nama-user-login").innerText = "Halo, " + res.nama + " [" + res.role + "]";
-                
                 pullDatabaseFresh();
             } else {
                 Swal.fire({ icon: 'error', title: 'Login Gagal!', text: res.message });
@@ -449,7 +458,7 @@
         });
     });
 
-    // PULL DATABASE FRESH
+    // REFRESH DATA SINKRONISASI
     function pullDatabaseFresh() {
         toggleLoading(true, "Sinkronisasi seluruh basis data terupdate...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "getData" }) })
@@ -468,6 +477,7 @@
                 tampilkanTabelPantauJurnalAdmin();
             } else if(USER_SESSION.role === "Guru") {
                 tampilkanHistoryJurnalGuru();
+                tampilkanHistoryMediaGuru();
             } else if(USER_SESSION.role === "Siswa") {
                 tampilkanRuangMediaSiswa();
                 tampilkanPapanPengumumanSiswa();
@@ -510,7 +520,7 @@
             if(rows[i][2]) setKelas.add(rows[i][2].toString().toUpperCase().trim());
         }
         
-        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "absen-input-kelas", "jrn-kelas", "med-kelas"];
+        const listDropdownId = ["dropdown-filter-siswa", "mon-kelas", "rkp-kelas", "absen-input-kelas", "jrn-kelas", "med-kelas", "filter-jurnal-admin", "filter-jurnal-guru", "filter-media-guru"];
         listDropdownId.forEach(id => {
             const el = document.getElementById(id);
             if(!el) return;
@@ -525,7 +535,7 @@
         });
     }
 
-    // NAVIGASI SUB TAB
+    // NAVIGASI
     function bukaTabAdmin(target) {
         document.querySelectorAll(".sub-panel-admin").forEach(p => p.classList.add("d-none"));
         document.querySelectorAll("#adminTabs .nav-link").forEach(l => l.classList.remove("active"));
@@ -545,6 +555,7 @@
         const payload = {
             action: "inputSiswa",
             nama: document.getElementById("form-s-nama").value,
+            panggilan: document.getElementById("form-s-panggilan").value, // Input manual (Poin 1)
             kelas: document.getElementById("form-s-kelas").value,
             sekolah: document.getElementById("form-s-sekolah").value,
             hpOrtu: document.getElementById("form-s-hportu").value,
@@ -553,7 +564,7 @@
             tglDaftar: new Date().toLocaleDateString('id-ID')
         };
         
-        toggleLoading(true, "Mendaftarkan siswa & menyusun credentials otomatis...");
+        toggleLoading(true, "Mendaftarkan siswa...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
@@ -586,15 +597,16 @@
         }
     }
 
-    // REGISTRASI GURU BARU (POIN 2)
+    // REGISTRASI GURU (POIN 2)
     document.getElementById("form-add-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
             action: "inputGuru",
             nama: document.getElementById("form-g-nama").value,
+            panggilan: document.getElementById("form-g-panggilan").value,
             mapel: document.getElementById("form-g-mapel").value
         };
-        toggleLoading(true, "Mendaftarkan tenaga pengajar baru...");
+        toggleLoading(true, "Mendaftarkan pengajar ke database mandiri...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
@@ -610,19 +622,19 @@
     function tampilkanTabelGuruAdmin() {
         const tbody = document.getElementById("tbody-tabel-guru");
         tbody.innerHTML = "";
-        const rows = CACHE_DATA.akun;
+        const rows = CACHE_DATA.guru; // Membaca dari tab Guru khusus (Poin 2)
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='4' class='text-center text-muted'>Nihil data guru</td></tr>"; return; }
         for(let i=1; i<rows.length; i++) {
-            if(rows[i][2] === "Guru") {
-                tbody.innerHTML += `<tr>
-                    <td><span class="badge bg-primary">${rows[i][4]}</span></td>
-                    <td><b>${rows[i][3]}</b></td>
-                    <td><code class="text-danger">${rows[i][0]}</code></td>
-                </tr>`;
-            }
+            tbody.innerHTML += `<tr>
+                <td><span class="badge bg-primary">${rows[i][0]}</span></td>
+                <td><b>${rows[i][1]}</b></td>
+                <td><span class="badge bg-light text-dark border">${rows[i][3]}</span></td>
+                <td><code class="text-danger">${rows[i][2].toString().toLowerCase()}</code></td>
+            </tr>`;
         }
     }
 
-    // KASIR & MESIN CARI
+    // KASIR & SPP MONITORING
     function mesinCariKasir(keyword) {
         const box = document.getElementById("container-search-kasir");
         box.innerHTML = "";
@@ -692,23 +704,15 @@
         });
     });
 
-    // FIX CETAK KUITANSI VIA IFRAME TERSEMBUNYI (ANTI-BLANK POIN 6)
     function cetakKuitansiIframe() {
         const konten = document.getElementById("printable-kuitansi").innerHTML;
         const iframe = document.createElement('iframe');
-        iframe.style.position = 'absolute';
-        iframe.style.width = '0px';
-        iframe.style.height = '0px';
-        iframe.style.border = 'none';
+        iframe.style.position = 'absolute'; iframe.style.width = '0px'; iframe.style.height = '0px'; iframe.style.border = 'none';
         document.body.appendChild(iframe);
-        
         const doc = iframe.contentWindow.document;
         doc.open();
-        doc.write(`<html><head><title>Cetak Kuitansi SAKHA</title>
-        <style>body{font-family:'Courier New',monospace; padding:20px; text-align:center;}</style>
-        </head><body onload="window.print();window.close();">${konten}</body></html>`);
+        doc.write(`<html><head><title>Cetak</title><style>body{font-family:'Courier New',monospace;padding:20px;text-align:center;}</style></head><body onload="window.print();window.close();">${konten}</body></html>`);
         doc.close();
-        
         setTimeout(() => document.body.removeChild(iframe), 2000);
     }
 
@@ -739,7 +743,7 @@
         }
     }
 
-    // SUSUN REKAP MATRIKS DENGAN IDENTITAS FORMAL CETAK (POIN 8)
+    // INTERPRETASI MATRIKS DATA TERKOMPRESI JANGKA PANJANG (POIN 3)
     function prosesHitungMatriksAbsen() {
         const bln = document.getElementById("rkp-bulan").value;
         const kls = document.getElementById("rkp-kelas").value;
@@ -750,92 +754,160 @@
             return;
         }
         
-        // Atur Konten Header Formal Cetak (Poin 8)
-        document.getElementById("lbl-formal-meta").innerText = `Kelas: ${kls} | Bulan Administrasi: ${bln}`;
-        document.getElementById("lbl-formal-tglcetak").innerText = `Tanggal Cetak Dokumen: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID')}`;
-        
         const logAbsen = CACHE_DATA.absen;
-        let setTanggal = new Set();
-        for(let i=1; i<logAbsen.length; i++) {
-            if(logAbsen[i][2] === bln && logAbsen[i][3].toString().toUpperCase() === kls.toUpperCase()) { setTanggal.add(logAbsen[i][1]); }
-        }
-        let arrTgl = Array.from(setTanggal).sort();
-        if(arrTgl.length === 0) {
-            inside.innerHTML = "<div class='alert alert-warning text-center fw-bold'>Tidak ditemukan rekam data absensi.</div>";
-            return;
-        }
+        let listTanggalTerdata = [];
+        let petaKehadiranSiswa = {}; // Struktur: { NamaSiswa: { "16/6/2026": "H" } }
         
-        let matriks = {};
+        // Scan baris data terkompresi
         for(let i=1; i<logAbsen.length; i++) {
-            let tgl = logAbsen[i][1], bTarget = logAbsen[i][2], kTarget = logAbsen[i][3], nama = logAbsen[i][4], stat = logAbsen[i][5];
-            if(bTarget === bln && kTarget.toString().toUpperCase() === kls.toUpperCase()) {
-                if(!matriks[nama]) matriks[nama] = {};
-                matriks[nama][tgl] = stat;
+            let tglRow = logAbsen[i][1];
+            let blnRow = logAbsen[i][2];
+            let klsRow = logAbsen[i][3].toString().toUpperCase().trim();
+            let jsonString = logAbsen[i][4];
+            
+            if(blnRow === bln && klsRow === kls.toUpperCase()) {
+                if(!listTanggalTerdata.includes(tglRow)) listTanggalTerdata.push(tglRow);
+                
+                try {
+                    let objData = JSON.parse(jsonString);
+                    for(let namaSiswa in objData) {
+                        if(!petaKehadiranSiswa[namaSiswa]) petaKehadiranSiswa[namaSiswa] = {};
+                        petaKehadiranSiswa[namaSiswa][tglRow] = objData[namaSiswa];
+                    }
+                } catch(e) { console.log("Gagal urai log JSON baris: " + i); }
             }
         }
         
-        let html = `<div class="d-flex justify-content-end mb-3 no-print"><button class="btn btn-sm btn-dark px-4" onclick="window.print()"><i class="fa fa-print"></i> Cetak Laporan Presensi Resmi</button></div>`;
-        html += `<table class="table table-bordered table-striped align-middle text-center small"><thead class="table-dark"><tr><th class="text-start">Nama Murid</th>`;
-        arrTgl.forEach(t => { html += `<th>${t.split('/')[0]}/${t.split('/')[1]}</th>`; });
-        html += `<th>Total H</th><th>%</th></tr></thead><tbody>`;
-        
-        for(let nama in matriks) {
-            html += `<tr><td class="text-start fw-bold">${nama}</td>`;
-            let cH = 0;
-            arrTgl.forEach(t => {
-                let s = matriks[nama][t] || "-";
-                let tC = "text-muted";
-                if(s === "H") { cH++; tC="text-success fw-bold"; }
-                if(s === "S") tC="text-primary fw-bold";
-                if(s === "I") textC="text-warning fw-bold";
-                if(s === "A") tC="text-danger fw-bold";
-                html += `<td class="${tC}">${s}</td>`;
-            });
-            html += `<td class="text-success fw-bold">${cH}/${arrTgl.length}</td><td class="fw-bold">${Math.round((cH/arrTgl.length)*100)}%</td></tr>`;
+        listTanggalTerdata.sort();
+        if(listTanggalTerdata.length === 0) {
+            inside.innerHTML = "<div class='alert alert-warning text-center fw-bold'>Tidak ditemukan rekam data absensi pada bulan & kelas ini.</div>";
+            return;
         }
-        html += `</tbody></table>`;
-        inside.innerHTML = html;
+        
+        // Buat Blok Konten Mandiri Terisolasi Khusus untuk di-Iframe Cetak (Poin 6)
+        let htmlBlokCetak = `<div class="text-center" style="font-family:'Plus Jakarta Sans',sans-serif; color:#000; padding:10px;">
+            <h2 style="font-weight:800; margin:0; font-size:1.6rem;">BIMBEL SAKHA EDUCATION HUB</h2>
+            <p style="margin:3px 0; font-size:0.9rem; font-weight:600; letter-spacing:0.5px;">LAPORAN BULANAN KEHADIRAN AKTIVITAS BELAJAR SISWA</p>
+            <h5 style="font-weight:bold; margin-top:6px; font-size:1rem; border-top:1px solid #000; border-bottom:1px solid #000; padding:4px 0;">Kelas: ${kls} | Bulan Administrasi: ${bln}</h5>
+            <p style="font-size:0.8rem; text-align:right; margin:5px 0 15px 0;">Tanggal Cetak Dokumen: ${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID')}</p>
+            <table border="1" cellspacing="0" cellpadding="6" style="width:100%; border-collapse:collapse; text-align:center; font-size:0.85rem;">
+                <thead style="background-color:#f2f2f2;"><tr><th style="text-align:left;">Nama Murid</th>`;
+        
+        listTanggalTerdata.forEach(t => { 
+            let pangkasTgl = t.split('/')[0] + '/' + t.split('/')[1];
+            htmlBlokCetak += `<th>${pangkasTgl}</th>`; 
+        });
+        htmlBlokCetak += `<th>Total H</th><th>%</th></tr></thead><tbody>`;
+        
+        // Isi Baris Tabel Matriks
+        for(let nama in petaKehadiranSiswa) {
+            htmlBlokCetak += `<tr><td style="text-align:left; font-weight:bold;">${nama}</td>`;
+            let totalHadir = 0;
+            listTanggalTerdata.forEach(t => {
+                let status = petaKehadiranSiswa[nama][t] || "-";
+                if(status === "H") totalHadir++;
+                htmlBlokCetak += `<td>${status}</td>`;
+            });
+            let persen = Math.round((totalHadir / listTanggalTerdata.length) * 100);
+            htmlBlokCetak += `<td style="font-weight:bold; color:green;">${totalHadir}/${listTanggalTerdata.length}</td><td style="font-weight:bold;">${persen}%</td></tr>`;
+        }
+        htmlBlokCetak += `</tbody></table></div>`;
+        
+        // Render Preview di Screen Aplikasi
+        inside.innerHTML = `<div class="d-flex justify-content-end mb-3 no-print">
+            <button class="btn btn-dark px-4 font-semibold" onclick="cetakLaporanMatriksIframeTerisolasi()"><i class="fa fa-print"></i> Cetak Laporan Presensi Resmi</button>
+        </div>
+        <div id="wrapper-pure-konten-matriks">${htmlBlokCetak}</div>`;
     }
 
-    // PANTAU JURNAL DI SISI ADMIN (POIN 4)
+    // FIX CETAK MATRIKS TERISOLASI (ANTI-BOCOR POIN 6)
+    function cetakLaporanMatriksIframeTerisolasi() {
+        const kontenM = document.getElementById("wrapper-pure-konten-matriks").innerHTML;
+        const iframeM = document.createElement('iframe');
+        iframeM.style.position = 'absolute'; iframeM.style.width = '0px'; iframeM.style.height = '0px'; iframeM.style.border = 'none';
+        document.body.appendChild(iframeM);
+        
+        const docM = iframeM.contentWindow.document;
+        docM.open();
+        docM.write(`<html><head><title>Laporan Presensi SAKHA</title>
+        <style>body{font-family:sans-serif; background:white; color:black; padding:10px;}</style>
+        </head><body onload="window.print();window.close();">${kontenM}</body></html>`);
+        docM.close();
+        setTimeout(() => document.body.removeChild(iframeM), 2000);
+    }
+
+    // MONITOR JURNAL ADMIN
     function tampilkanTabelPantauJurnalAdmin() {
+        const fKls = document.getElementById("filter-jurnal-admin").value;
         const tbody = document.getElementById("tbody-admin-pantau-jurnal");
         tbody.innerHTML = "";
         const rows = CACHE_DATA.jurnal;
         if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='5' class='text-center'>Belum ada jurnal mengajar.</td></tr>"; return; }
+        
         for(let i=rows.length-1; i>=1; i--) {
-            tbody.innerHTML += `<tr><td>${rows[i][1]}</td><td><span class="badge bg-dark">Kelas ${rows[i][2]}</span></td><td><b>${rows[i][3]}</b></td><td>${rows[i][4]}</td><td><span class="text-danger">${rows[i][5]}</span></td></tr>`;
+            let tgl = rows[i][1], kelas = rows[i][2], mat = rows[i][3], cat = rows[i][4], pr = rows[i][5];
+            if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
+            tbody.innerHTML += `<tr><td>${tgl}</td><td><span class="badge bg-dark">Kelas ${kelas}</span></td><td><b>${mat}</b></td><td>${cat}</td><td><span class="text-danger">${pr}</span></td></tr>`;
         }
     }
 
-    // GURU ABSENSI KILAT
-    function tarikSiswaUntukAbsenGuru(kelas) {
+    // SINKRONISASI OTOMATIS DATA ABSEN LAMA (EDIT DAN TIMPA - POIN 3)
+    function sinkronisasiLogDataAbsenLamaGuru() {
+        const rawTgl = document.getElementById("absen-input-tgl").value;
+        const kls = document.getElementById("absen-input-kelas").value;
         const tbody = document.getElementById("tbody-guru-absen");
+        
+        if(!rawTgl || !kls) {
+            tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>Tentukan tanggal dan kelas di atas untuk menarik records.</td></tr>";
+            return;
+        }
+        
+        let tglFormat = new Date(rawTgl).toLocaleDateString('id-ID');
+        
+        // Cari apakah ada log terkompresi untuk tanggal & kelas ini
+        let petaStatusLama = null;
+        const logAbsen = CACHE_DATA.absen;
+        for(let i=1; i<logAbsen.length; i++) {
+            if(logAbsen[i][1].toString().trim() === tglFormat.trim() && 
+                logAbsen[i][3].toString().toUpperCase().trim() === kls.toUpperCase().trim()) {
+                try { petaStatusLama = JSON.parse(logAbsen[i][4]); } catch(e){}
+                break;
+            }
+        }
+        
         tbody.innerHTML = "";
-        if(!kelas) return;
         const sis = CACHE_DATA.siswa;
         let idx = 0;
+        let adaSiswa = false;
+        
         for(let i=1; i<sis.length; i++) {
-            let nama = sis[i][1], kls = sis[i][2], status = sis[i][8];
-            if(status === "Aktif" && kls.toString().toUpperCase() === kelas.toUpperCase()) {
+            let nama = sis[i][1], klsSiswa = sis[i][2], statusSiswa = sis[i][8];
+            if(statusSiswa === "Aktif" && klsSiswa.toString().toUpperCase() === kls.toUpperCase()) {
+                adaSiswa = true;
                 idx++;
+                
+                // Tentukan status default: jika ada data lama pakai data lama, jika tidak default "H"
+                let statusDefault = "H";
+                if(petaStatusLama && petaStatusLama[nama]) { statusDefault = petaStatusLama[nama]; }
+                
                 tbody.innerHTML += `<tr>
                     <td><b class="text-dark">${nama}</b></td>
                     <td class="text-center">
                         <div class="d-flex justify-content-center">
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="h_${idx}" value="H" checked data-nama="${nama}">
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="h_${idx}" value="H" ${statusDefault==="H"?"checked":""} data-nama="${nama}">
                             <label class="btn-check-absen lbl-h" for="h_${idx}">H</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="s_${idx}" value="S" data-nama="${nama}">
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="s_${idx}" value="S" ${statusDefault==="S"?"checked":""} data-nama="${nama}">
                             <label class="btn-check-absen lbl-s" for="s_${idx}">S</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="i_${idx}" value="I" data-nama="${nama}">
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="i_${idx}" value="I" ${statusDefault==="I"?"checked":""} data-nama="${nama}">
                             <label class="btn-check-absen lbl-i" for="i_${idx}">I</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="a_${idx}" value="A" data-nama="${nama}">
+                            <input type="radio" class="btn-check" name="rad_${idx}" id="a_${idx}" value="A" ${statusDefault==="A"?"checked":""} data-nama="${nama}">
                             <label class="btn-check-absen lbl-a" for="a_${idx}">A</label>
                         </div>
                     </td>
                 </tr>`;
             }
         }
+        if(!adaSiswa) tbody.innerHTML = "<tr><td colspan='2' class='text-center text-danger fw-bold'>Tidak ada siswa terdaftar di kelas ini.</td></tr>";
     }
 
     function kunciKirimAbsenGuruMassal() {
@@ -848,25 +920,26 @@
         document.querySelectorAll("#tbody-guru-absen input[type='radio']:checked").forEach(rad => {
             records.push({ nama: rad.getAttribute("data-nama"), status: rad.value });
         });
+        if(records.length === 0) return Swal.fire({ icon: 'error', title: 'Gagal', text: 'Tidak ada data siswa untuk dikirim.' });
         
         const payload = {
             action: "submitAbsen", tanggal: new Date(tgl).toLocaleDateString('id-ID'),
             bulanTarget: bTar, kelas: kls, guru: USER_SESSION.nama, records: records
         };
         
-        toggleLoading(true, "Mengunci & memperbarui presensi di server database...");
+        toggleLoading(true, "Mengunci & menyimpan data presensi terkompresi...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Data Disimpan', text: 'Presensi kelas berhasil dikunci.' });
+                Swal.fire({ icon: 'success', title: 'Data Berhasil Disimpan', text: 'Presensi aman dan diperbarui di awan.', timer: 2000, showConfirmButton: false });
                 pullDatabaseFresh();
             }
-        });
+        }).catch(() => { toggleLoading(false); Swal.fire({ icon: 'error', title: 'Fatal Error', text: 'Koneksi terputus.' }); });
     }
 
-    // GURU JURNAL & REKAPAN JURNAL MANDIRI (POIN 4)
+    // JURNAL MENGAJAR SISI GURU (POIN 4)
     document.getElementById("form-submit-jurnal-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -891,16 +964,27 @@
     });
 
     function tampilkanHistoryJurnalGuru() {
+        const fKls = document.getElementById("filter-jurnal-guru").value;
         const tbody = document.getElementById("tbody-guru-history-jurnal");
         tbody.innerHTML = "";
         const rows = CACHE_DATA.jurnal;
-        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='3'>Belum ada riwayat mengajar.</td></tr>"; return; }
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='4'>Belum ada riwayat mengajar.</td></tr>"; return; }
+        
         for(let i=rows.length-1; i>=1; i--) {
-            tbody.innerHTML += `<tr><td><b>${rows[i][1]}</b><br><span class="badge bg-success">Kelas ${rows[i][2]}</span></td><td>${rows[i][3]}</td><td>${rows[i][4]}</td></tr>`;
+            let tgl = rows[i][1], kelas = rows[i][2], mat = rows[i][3], cat = rows[i][4], pr = rows[i][5];
+            if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
+            
+            // Tampilan lengkap memuat Kolom PR (Poin 4)
+            tbody.innerHTML += `<tr>
+                <td><b>${tgl}</b><br><span class="badge bg-success">Kelas ${kelas}</span></td>
+                <td>${mat}</td>
+                <td>${cat}</td>
+                <td><span class="text-danger fw-semibold">${pr}</span></td>
+            </tr>`;
         }
     }
 
-    // GURU MEDIA UPLOAD (POIN 5)
+    // REKAP MEDIA BELAJAR SISI GURU (POIN 5)
     document.getElementById("form-upload-media-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -912,20 +996,45 @@
             linkYt: document.getElementById("med-yt").value,
             linkKuis: document.getElementById("med-kuis").value
         };
-        toggleLoading(true, "Mengunggah tautan media belajar digital...");
+        toggleLoading(true, "Mengunggah tautan media belajar...");
         fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
         .then(res => res.json())
         .then(res => {
             toggleLoading(false);
             if(res.status === "success") {
-                Swal.fire({ icon: 'success', title: 'Sukses Rilis', text: 'Materi belajar berhasil didistribusikan ke siswa!' });
+                Swal.fire({ icon: 'success', title: 'Sukses', text: 'Materi belajar dirilis ke siswa!' });
                 document.getElementById("form-upload-media-guru").reset();
                 pullDatabaseFresh();
             }
         });
     });
 
-    // SISWA AREA RENDERING (FIXED BINDING CAPITALS)
+    function tampilkanHistoryMediaGuru() {
+        const fKls = document.getElementById("filter-media-guru").value;
+        const tbody = document.getElementById("tbody-guru-history-media");
+        tbody.innerHTML = "";
+        const rows = CACHE_DATA.media;
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='3' class='text-center'>Belum ada media dirilis.</td></tr>"; return; }
+        
+        for(let i=rows.length-1; i>=1; i--) {
+            let kelas = rows[i][1], mapel = rows[i][2], judul = rows[i][3], pdf = rows[i][4], yt = rows[i][5], kuis = rows[i][6];
+            if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
+            
+            tbody.innerHTML += `<tr>
+                <td><span class="badge bg-dark">Kelas ${kelas}</span><br><small class="text-muted fw-bold">${mapel}</small></td>
+                <td><b>${judul}</b></td>
+                <td>
+                    <div class="d-flex gap-1">
+                        <a href="${pdf}" target="_blank" class="btn btn-xs btn-outline-danger p-1 small" title="PDF"><i class="fa fa-file-pdf"></i></a>
+                        <a href="${yt}" target="_blank" class="btn btn-xs btn-outline-success p-1 small" title="Video"><i class="fab fa-youtube"></i></a>
+                        <a href="${kuis}" target="_blank" class="btn btn-xs btn-outline-primary p-1 small" title="Kuis"><i class="fa fa-edit"></i></a>
+                    </div>
+                </td>
+            </tr>`;
+        }
+    }
+
+    // SISWA MEDIA RENDERING
     function tampilkanRuangMediaSiswa() {
         let identitasMurid = CACHE_DATA.siswa.find(s => s[0] === USER_SESSION.id);
         if(!identitasMurid) return;
