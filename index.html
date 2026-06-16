@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAKHA Education Hub - Administrasi & Ruang Belajar Digital</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts Premium -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Font Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     
     <style>
@@ -109,13 +105,11 @@
 </head>
 <body>
 
-<!-- LOADING ANIMASI OVERLAY -->
 <div id="loading-overlay" class="d-none">
     <div class="spinner-border text-success" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
     <h5 class="mt-3 fw-bold text-success" id="loading-text">Menghubungkan ke Server SAKHA...</h5>
 </div>
 
-<!-- SCREEN 1: LOGIN PAGE -->
 <div id="screen-login" class="container min-vh-100 d-flex align-items-center justify-content-center">
     <div class="card p-5 text-center" style="max-width: 440px; width: 100%;">
         <div class="d-flex justify-content-center align-items-center mb-1">
@@ -137,7 +131,6 @@
     </div>
 </div>
 
-<!-- NAVBAR UTAMA SYSTEM -->
 <nav id="app-nav" class="navbar navbar-expand-lg theme-bg d-none mb-4 shadow-sm">
     <div class="container">
         <span class="navbar-brand fw-bold text-white">🌳 Bimbel SAKHA Digital Hub</span>
@@ -148,10 +141,8 @@
     </div>
 </nav>
 
-<!-- MAIN CONTAINER DASHBOARD MULTIUSER -->
 <div id="screen-dashboard" class="container d-none mb-5">
     
-    <!-- ==================== DASHBOARD ADMIN ==================== -->
     <div id="panel-admin" class="d-none">
         <div class="row g-3 mb-4">
             <div class="col-md-4"><div class="card p-3 border-start border-4 border-success bg-white"><span class="text-muted small fw-semibold">TOTAL SISWA AKTIF</span><h2 class="fw-bold m-0 text-success" id="stat-total-siswa">0</h2></div></div>
@@ -167,7 +158,6 @@
             <li class="nav-item"><button class="nav-link" onclick="bukaTabAdmin('jurnal')"><i class="fa fa-book-open me-1"></i> Pantau Jurnal</button></li>
         </ul>
         
-        <!-- SUB ADMIN: DATA SISWA -->
         <div id="tab-adm-pendaftaran" class="sub-panel-admin">
             <div class="row">
                 <div class="col-md-4 mb-4">
@@ -197,7 +187,6 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: DATA GURU -->
         <div id="tab-adm-guru" class="sub-panel-admin d-none">
             <div class="row">
                 <div class="col-md-4 mb-4">
@@ -220,7 +209,6 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: KASIR SPP -->
         <div id="tab-adm-pembayaran" class="sub-panel-admin d-none">
             <div class="row">
                 <div class="col-md-5 mb-4">
@@ -255,7 +243,6 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: REKAP ABSENSI MATRIKS -->
         <div id="tab-adm-rekap" class="sub-panel-admin d-none">
             <div class="card p-4">
                 <h5 class="fw-bold text-success mb-3">Buku Rekap Presensi Bulanan Matriks</h5>
@@ -272,19 +259,17 @@
             </div>
         </div>
 
-        <!-- SUB ADMIN: PANTAU JURNAL -->
         <div id="tab-adm-jurnal" class="sub-panel-admin d-none">
             <div class="card p-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold m-0"><i class="fa fa-eye"></i> Monitoring Jurnal Mengajar Seluruh Guru</h5>
                     <select id="filter-jurnal-admin" class="form-select w-auto" onchange="tampilkanTabelPantauJurnalAdmin()"><option value="Semua">Semua Kelas</option></select>
                 </div>
-                <div class="table-responsive"><table class="table table-bordered table-striped align-middle small"><thead class="table-dark"><tr><th>Tanggal</th><th>Kelas</th><th>Materi Pembahasan</th><th>Catatan Kelas & Kasus</th><th>Tugas Rumah (PR)</th></tr></thead><tbody id="tbody-admin-pantau-jurnal"></tbody></table></div>
+                <div class="table-responsive"><table class="table table-bordered table-striped align-middle small"><thead class="table-dark"><tr><th style="width: 50px;">No</th><th>Tanggal</th><th>Kelas</th><th>Materi Pembahasan</th><th>Catatan Kelas & Kasus</th><th>Tugas Rumah (PR)</th></tr></thead><tbody id="tbody-admin-pantau-jurnal"></tbody></table></div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== DASHBOARD GURU ==================== -->
     <div id="panel-guru" class="d-none">
         <ul class="nav nav-pills mb-4 justify-content-center shadow-sm p-2 bg-white rounded-3" id="guruTabs">
             <li class="nav-item"><button class="nav-link active" onclick="bukaTabGuru('absen')"><i class="fa fa-check-square me-1"></i> Isian Absen Siswa</button></li>
@@ -293,7 +278,6 @@
             <li class="nav-item"><button class="nav-link" onclick="bukaTabGuru('media')"><i class="fa fa-cloud-upload-alt me-1"></i> Media Belajar</button></li>
         </ul>
 
-        <!-- SUB GURU: INPUT ABSEN -->
         <div id="tab-gru-absen" class="sub-panel-guru">
             <div class="card p-4">
                 <h5 class="fw-bold text-success mb-3">Input Kehadiran Kelas Harian</h5>
@@ -304,12 +288,11 @@
                 </div>
                 <div class="alert alert-warning py-2 small"><i class="fa fa-history"></i> <b>Sistem Sinkron otomatis:</b> Jika data tanggal ini diubah lalu disimpan kembali, sistem otomatis menimpa file lama.</div>
                 <hr>
-                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="2" class="text-center text-muted">Tentukan tanggal dan kelas di atas.</td></tr></tbody></table></div>
+                <div class="table-responsive mb-4"><table class="table align-middle"><thead><tr><th style="width: 60px;">No Urut</th><th>Nama Siswa</th><th class="text-center">Status Presensi (H / S / I / A)</th></tr></thead><tbody id="tbody-guru-absen"><tr><td colspan="3" class="text-center text-muted">Tentukan tanggal dan kelas di atas.</td></tr></tbody></table></div>
                 <button class="btn btn-theme w-100 py-3 rounded-3 shadow fw-bold" onclick="kunciKirimAbsenGuruMassal()"><i class="fa fa-lock"></i> Kunci & Kirim Data Absensi</button>
             </div>
         </div>
 
-        <!-- SUB GURU: REKAP ABSEN -->
         <div id="tab-gru-g-rekap" class="sub-panel-guru d-none">
             <div class="card p-4">
                 <h5 class="fw-bold text-success mb-3">Buku Rekap Presensi (Akses Guru)</h5>
@@ -326,7 +309,6 @@
             </div>
         </div>
 
-        <!-- SUB GURU: JURNAL -->
         <div id="tab-gru-jurnal" class="sub-panel-guru d-none">
             <div class="row">
                 <div class="col-md-5 mb-4">
@@ -348,13 +330,12 @@
                             <h5 class="fw-bold m-0"><i class="fa fa-history"></i> Rekam Riwayat Jurnal</h5>
                             <select id="filter-jurnal-guru" class="form-select w-auto" onchange="tampilkanHistoryJurnalGuru()"><option value="Semua">Semua Kelas</option></select>
                         </div>
-                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Tanggal/Kelas</th><th>Materi Bahasan</th><th>Catatan Kasus</th><th>PR</th></tr></thead><tbody id="tbody-guru-history-jurnal"></tbody></table></div>
+                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th style="width: 50px;">No</th><th>Tanggal/Kelas</th><th>Materi Bahasan</th><th>Catatan Kasus</th><th>PR</th></tr></thead><tbody id="tbody-guru-history-jurnal"></tbody></table></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SUB GURU: MEDIA BELAJAR -->
         <div id="tab-gru-media" class="sub-panel-guru d-none">
             <div class="row">
                 <div class="col-md-5 mb-4">
@@ -377,14 +358,13 @@
                             <h5 class="fw-bold m-0"><i class="fa fa-folder-open"></i> Log Tautan Media Rilis</h5>
                             <select id="filter-media-guru" class="form-select w-auto" onchange="tampilkanHistoryMediaGuru()"><option value="Semua">Semua Kelas</option></select>
                         </div>
-                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th>Kelas/Mapel</th><th>Judul Pembahasan</th><th>File Tautan</th></tr></thead><tbody id="tbody-guru-history-media"></tbody></table></div>
+                        <div class="table-responsive"><table class="table table-bordered align-middle small"><thead class="table-light"><tr><th style="width: 50px;">No</th><th>Kelas/Mapel</th><th>Judul Pembahasan</th><th>File Tautan</th></tr></thead><tbody id="tbody-guru-history-media"></tbody></table></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== DASHBOARD SISWA ==================== -->
     <div id="panel-siswa" class="d-none">
         <div class="alert bg-white p-4 border border-success-subtle rounded-3 mb-4 shadow-sm text-start">
             <h5 class="fw-bold text-success mb-1"><i class="fa fa-bullhorn"></i> PAPAN PENGUMUMAN RESMI SAKHA</h5>
@@ -398,7 +378,6 @@
     </div>
 </div>
 
-<!-- MODAL POP UP KUITANSI DIGITAL KASIR -->
 <div class="modal fade" id="modalKuitansi" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -431,7 +410,6 @@
     </div>
 </div>
 
-<!-- FOOTER SYSTEM -->
 <footer class="py-3 text-center w-100 no-print">
     <div class="container">
         <p class="m-0 fw-semibold">&copy; 2026 Bimbel SAKHA. All Rights Reserved.</p>
@@ -439,7 +417,6 @@
     </div>
 </footer>
 
-<!-- JavaScript Framework -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -614,7 +591,7 @@
         });
     });
 
-    // TABEL SISWA DENGAN NOMOR URUT DINAMIS (PERBAIKAN POIN 1)
+    // TABEL SISWA DENGAN NOMOR URUT DINAMIS
     function tampilkanTabelSiswa() {
         const filter = document.getElementById("dropdown-filter-siswa").value;
         const tbody = document.getElementById("tbody-tabel-siswa");
@@ -639,7 +616,7 @@
         }
     }
 
-    // TABEL GURU DENGAN NOMOR URUT DINAMIS (PERBAIKAN POIN 1)
+    // TABEL GURU DENGAN NOMOR URUT DINAMIS
     function tampilkanTabelGuruAdmin() {
         const tbody = document.getElementById("tbody-tabel-guru");
         tbody.innerHTML = "";
@@ -741,7 +718,7 @@
         setTimeout(() => document.body.removeChild(iframe), 2000);
     }
 
-    // MONITOR TAGIHAN SPP + LIHAT KUITANSI ULANG + NOMOR URUT DINAMIS (PERBAIKAN POIN 1 & 2)
+    // MONITOR TAGIHAN SPP + LIHAT KUITANSI ULANG + NOMOR URUT DINAMIS
     function tampilkanTabelMonitorTagihan() {
         const bln = document.getElementById("mon-bulan").value;
         const kls = document.getElementById("mon-kelas").value;
@@ -750,7 +727,6 @@
         
         let mapLunas = {};
         const keu = CACHE_DATA.keuangan;
-        // Petakan ke index baris untuk mengambil objek invoice lengkap
         for(let i=1; i<keu.length; i++) { 
             if(keu[i][3] === bln) {
                 mapLunas[keu[i][1]] = {
@@ -777,7 +753,6 @@
             
             let btnAction = "";
             if(isLunas) {
-                // Modifikasi Poin 2: Tombol Lihat Kuitansi Kustomisasi data lama
                 btnAction = `<button type="button" class="btn btn-sm btn-theme text-white rounded-pill px-3 shadow-sm fw-bold" onclick="panggilUlangModalKuitansiLama('${dataLunas.invoice}', '${dataLunas.tanggal}', '${id}', '${nama.replace(/'/g, "\\'")}', '${kelas}', '${bln}', '${dataLunas.metode}', '${dataLunas.jumlah}', '${dataLunas.penerima}', '${hpO}')"><i class="fa fa-receipt"></i> Lihat Kuitansi</button>`;
             } else {
                 let waMsg = window.encodeURIComponent("Halo Ayah/Bunda dari *" + nama + "*, kami dari Admin Bimbel SAKHA menginfokan bahwa iuran SPP untuk bulan *" + bln + "* belum terdata. Mohon konfirmasinya.");
@@ -796,7 +771,6 @@
         }
     }
 
-    // ANTISIPASI RE-CALL KUITANSI SPP (PERBAIKAN POIN 2)
     function panggilUlangModalKuitansiLama(invoice, tanggal, idSiswa, nama, kelas, bulan, metode, jumlah, petugas, hpO) {
         document.getElementById("k-invoice").innerText = invoice;
         document.getElementById("k-tanggal").innerText = tanggal;
@@ -813,12 +787,11 @@
             window.open("https://wa.me/" + normalisasiNomorWA(hpO) + "?text=" + msgText, "_blank");
         };
         
-        // Membuka modal bootstrap kuitansi secara fleksibel
         const kuitansiModal = new bootstrap.Modal(document.getElementById('modalKuitansi'));
         kuitansiModal.show();
     }
 
-    // INTERPRETASI MATRIKS + NOMOR URUT DINAMIS PER BARIS SISWA (PERBAIKAN POIN 1)
+    // INTERPRETASI MATRIKS + NOMOR URUT DINAMIS PER BARIS SISWA
     function prosesHitungMatriksAbsen(roleTarget) {
         let bln, kls, insideId;
         if(roleTarget === 'Admin') {
@@ -881,7 +854,6 @@
         });
         htmlBlokCetak += `<th>Total H</th><th>%</th></tr></thead><tbody>`;
         
-        // Cetak Baris Nama Siswa Dengan Nomor Urut yang di-Reset Dinamis (Poin 1)
         let nomorUrutSiswaAbsen = 1;
         for(let nama in petaKehadiranSiswa) {
             htmlBlokCetak += `<tr>
@@ -933,29 +905,39 @@
         setTimeout(() => document.body.removeChild(iframeM), 2000);
     }
 
-    // MONITOR JURNAL ADMIN
+    // MONITOR JURNAL ADMIN + NOMOR URUT DINAMIS (TAMBAHAN PERBAIKAN)
     function tampilkanTabelPantauJurnalAdmin() {
         const fKls = document.getElementById("filter-jurnal-admin").value;
         const tbody = document.getElementById("tbody-admin-pantau-jurnal");
         tbody.innerHTML = "";
         const rows = CACHE_DATA.jurnal;
-        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='5' class='text-center'>Belum ada jurnal mengajar.</td></tr>"; return; }
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='6' class='text-center'>Belum ada jurnal mengajar.</td></tr>"; return; }
         
+        let nomorUrut = 1;
         for(let i=rows.length-1; i>=1; i--) {
             let tgl = rows[i][1], kelas = rows[i][2], mat = rows[i][3], cat = rows[i][4], pr = rows[i][5];
             if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
-            tbody.innerHTML += `<tr><td>${tgl}</td><td><span class="badge bg-dark">Kelas ${kelas}</span></td><td><b>${mat}</b></td><td>${cat}</td><td><span class="text-danger">${pr}</span></td></tr>`;
+            
+            tbody.innerHTML += `<tr>
+                <td><b>${nomorUrut}</b></td>
+                <td>${tgl}</td>
+                <td><span class="badge bg-dark">Kelas ${kelas}</span></td>
+                <td><b>${mat}</b></td>
+                <td>${cat}</td>
+                <td><span class="text-danger">${pr}</span></td>
+            </tr>`;
+            nomorUrut++;
         }
     }
 
-    // SINKRONISASI OTOMATIS DATA ABSEN LAMA
+    // SINKRONISASI DATA ABSEN LAMA + NOMOR URUT GURU SAAT PRESENSI (TAMBAHAN PERBAIKAN)
     function sinkronisasiLogDataAbsenLamaGuru() {
         const rawTgl = document.getElementById("absen-input-tgl").value;
         const kls = document.getElementById("absen-input-kelas").value;
         const tbody = document.getElementById("tbody-guru-absen");
         
         if(!rawTgl || !kls) {
-            tbody.innerHTML = "<tr><td colspan='2' class='text-center text-muted'>Tentukan tanggal dan kelas di atas.</td></tr>";
+            tbody.innerHTML = "<tr><td colspan='3' class='text-center text-muted'>Tentukan tanggal dan kelas di atas.</td></tr>";
             return;
         }
         
@@ -972,36 +954,37 @@
         
         tbody.innerHTML = "";
         const sis = CACHE_DATA.siswa;
-        let idx = 0;
+        let nomorUrutSiswa = 1;
         let adaSiswa = false;
         
         for(let i=1; i<sis.length; i++) {
             let nama = sis[i][1], klsSiswa = sis[i][2], statusSiswa = sis[i][8];
             if(statusSiswa === "Aktif" && klsSiswa.toString().toUpperCase() === kls.toUpperCase()) {
                 adaSiswa = true;
-                idx++;
                 
                 let statusDefault = "H";
                 if(petaStatusLama && petaStatusLama[nama]) { statusDefault = petaStatusLama[nama]; }
                 
                 tbody.innerHTML += `<tr>
+                    <td class="text-center fw-bold text-success" style="font-size:1.05rem;">${nomorUrutSiswa}</td>
                     <td><b class="text-dark">${nama}</b></td>
                     <td class="text-center">
                         <div class="d-flex justify-content-center">
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="h_${idx}" value="H" ${statusDefault==="H"?"checked":""} data-nama="${nama}">
-                            <label class="btn-check-absen lbl-h" for="h_${idx}">H</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="s_${idx}" value="S" ${statusDefault==="S"?"checked":""} data-nama="${nama}">
-                            <label class="btn-check-absen lbl-s" for="s_${idx}">S</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="i_${idx}" value="I" ${statusDefault==="I"?"checked":""} data-nama="${nama}">
-                            <label class="btn-check-absen lbl-i" for="i_${idx}">I</label>
-                            <input type="radio" class="btn-check" name="rad_${idx}" id="a_${idx}" value="A" ${statusDefault==="A"?"checked":""} data-nama="${nama}">
-                            <label class="btn-check-absen lbl-a" for="a_${idx}">A</label>
+                            <input type="radio" class="btn-check" name="rad_${nomorUrutSiswa}" id="h_${nomorUrutSiswa}" value="H" ${statusDefault==="H"?"checked":""} data-nama="${nama}">
+                            <label class="btn-check-absen lbl-h" for="h_${nomorUrutSiswa}">H</label>
+                            <input type="radio" class="btn-check" name="rad_${nomorUrutSiswa}" id="s_${nomorUrutSiswa}" value="S" ${statusDefault==="S"?"checked":""} data-nama="${nama}">
+                            <label class="btn-check-absen lbl-s" for="s_${nomorUrutSiswa}">S</label>
+                            <input type="radio" class="btn-check" name="rad_${nomorUrutSiswa}" id="i_${nomorUrutSiswa}" value="I" ${statusDefault==="I"?"checked":""} data-nama="${nama}">
+                            <label class="btn-check-absen lbl-i" for="i_${nomorUrutSiswa}">I</label>
+                            <input type="radio" class="btn-check" name="rad_${nomorUrutSiswa}" id="a_${nomorUrutSiswa}" value="A" ${statusDefault==="A"?"checked":""} data-nama="${nama}">
+                            <label class="btn-check-absen lbl-a" for="a_${nomorUrutSiswa}">A</label>
                         </div>
                     </td>
                 </tr>`;
+                nomorUrutSiswa++;
             }
         }
-        if(!adaSiswa) tbody.innerHTML = "<tr><td colspan='2' class='text-center text-danger fw-bold'>Tidak ada siswa terdaftar di kelas ini.</td></tr>";
+        if(!adaSiswa) tbody.innerHTML = "<tr><td colspan='3' class='text-center text-danger fw-bold'>Tidak ada siswa terdaftar di kelas ini.</td></tr>";
     }
 
     function kunciKirimAbsenGuruMassal() {
@@ -1033,7 +1016,7 @@
         }).catch(() => { toggleLoading(false); Swal.fire({ icon: 'error', title: 'Fatal Error', text: 'Koneksi gagal.' }); });
     }
 
-    // JURNAL MENGAJAR SISI GURU
+    // JURNAL MENGAJAR GURU
     document.getElementById("form-submit-jurnal-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -1062,22 +1045,25 @@
         const tbody = document.getElementById("tbody-guru-history-jurnal");
         tbody.innerHTML = "";
         const rows = CACHE_DATA.jurnal;
-        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='4'>Belum ada riwayat mengajar.</td></tr>"; return; }
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='5'>Belum ada riwayat mengajar.</td></tr>"; return; }
         
+        let nomorUrut = 1;
         for(let i=rows.length-1; i>=1; i--) {
             let tgl = rows[i][1], kelas = rows[i][2], mat = rows[i][3], cat = rows[i][4], pr = rows[i][5];
             if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
             
             tbody.innerHTML += `<tr>
+                <td><b>${nomorUrut}</b></td>
                 <td><b>${tgl}</b><br><span class="badge bg-success">Kelas ${kelas}</span></td>
                 <td>${mat}</td>
                 <td>${cat}</td>
                 <td><span class="text-danger fw-semibold">${pr}</span></td>
             </tr>`;
+            nomorUrut++;
         }
     }
 
-    // REKAP MEDIA BELAJAR SISI GURU
+    // REKAP MEDIA BELAJAR GURU + NOMOR URUT DINAMIS (TAMBAHAN PERBAIKAN)
     document.getElementById("form-upload-media-guru").addEventListener("submit", function(e) {
         e.preventDefault();
         const payload = {
@@ -1107,13 +1093,15 @@
         const tbody = document.getElementById("tbody-guru-history-media");
         tbody.innerHTML = "";
         const rows = CACHE_DATA.media;
-        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='3' class='text-center'>Belum ada media dirilis.</td></tr>"; return; }
+        if(rows.length <= 1) { tbody.innerHTML = "<tr><td colspan='4' class='text-center'>Belum ada media dirilis.</td></tr>"; return; }
         
+        let nomorUrut = 1;
         for(let i=rows.length-1; i>=1; i--) {
             let kelas = rows[i][1], mapel = rows[i][2], judul = rows[i][3], pdf = rows[i][4], yt = rows[i][5], kuis = rows[i][6];
             if(fKls !== "Semua" && kelas.toUpperCase() !== fKls.toUpperCase()) continue;
             
             tbody.innerHTML += `<tr>
+                <td><b>${nomorUrut}</b></td>
                 <td><span class="badge bg-dark">Kelas ${kelas}</span><br><small class="text-muted fw-bold">${mapel}</small></td>
                 <td><b>${judul}</b></td>
                 <td>
@@ -1124,6 +1112,7 @@
                     </div>
                 </td>
             </tr>`;
+            nomorUrut++;
         }
     }
 
